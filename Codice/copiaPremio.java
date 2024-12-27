@@ -1,15 +1,15 @@
-public class copiaPremio {
+public class CopiaPremio {
     private String ID;
 
-    public copiaPremio(String ID){
+    public CopiaPremio(String ID){
         this.ID = ID;
     }
 
-    public getID(){
+    public String getID(){
         return ID;
     }
 
-    public setID(String ID){
+    public void setID(String ID){
         this.ID = ID;
     }
 }
