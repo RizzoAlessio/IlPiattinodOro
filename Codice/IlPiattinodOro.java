@@ -9,7 +9,7 @@ public class IlPiattinodOro {
     private static IlPiattinodOro sistema;
     private Gioco currGioco;
     private Map<String, Gioco> GiochiDisponibili;
-    private Gioco currPremio;
+    private Premio currPremio;
     private Map<String, Premio> mappaPremi;
     
     private IlPiattinodOro() {
@@ -47,8 +47,7 @@ public class IlPiattinodOro {
             System.out.println("Inserimento Concluso");
             }
         }
-
-//temp    
+   
     public void loadGiochi() {
             Gioco g1 = new Gioco("01", "Biliardo", "Tavolo", 4, 10);
             Gioco g2 = new Gioco("02", "Flipper", "Cabinati", 1, 5);
@@ -57,7 +56,7 @@ public class IlPiattinodOro {
             this.GiochiDisponibili.put("02", g2);
             this.GiochiDisponibili.put("03", g3);
             System.out.println("Caricamento Completato");
-        }
+    }
     
         public List<Gioco> getElencoGiochi() {
             List<Gioco> listGiochi = new ArrayList<>();
