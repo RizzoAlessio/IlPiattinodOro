@@ -1,20 +1,23 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Premio {
-    Map<String, copiaPremio> mappaCopiePremio;
-
+    
     private String ID;
     private String Nome;
     private int Valore;
     private String Descrizione;
+    Map<String, CopiaPremio> mappaCopiePremio;
 
-    public Premio(String ID, int Valore, String Nome, String Descrizione){
-        this.mappaCopiePremio = new HashMap<>();
+
+    public Premio(String ID, String Nome, int Valore, String Descrizione){
         this.ID = ID;
         this.Nome = Nome;
         this.Valore = Valore;
         this.Descrizione = Descrizione; 
+        this.mappaCopiePremio = new HashMap<>();
     } 
 
     public String getID(){
@@ -49,8 +52,8 @@ public class Premio {
         this.Descrizione = Descrizione;
     }
 
-    public List<copiaPremio> getElencoCopiePremio() {
-        List<copiaPremio> listCopiePremio = new ArrayList<>();
+    public List<CopiaPremio> getElencoCopiePremio() {
+        List<CopiaPremio> listCopiePremio = new ArrayList<>();
         listCopiePremio.addAll(mappaCopiePremio.values());
         System.out.println(mappaCopiePremio);
         return listCopiePremio;
@@ -58,7 +61,7 @@ public class Premio {
 
     public void newCopia(){
         String ID = this.ID + "" +  mappaCopiePremio.size();
-        copiaPremio copia = new copiaPremio(ID);
+        CopiaPremio copia = new CopiaPremio(ID);
         this.mappaCopiePremio.put(ID, copia);
     }
 
@@ -67,5 +70,4 @@ public class Premio {
 		return "Premio{" + ID + ": " + Nome + ", valore = " + Valore + "\n Descrizione: " + Descrizione + "}\n";
 	}
 }
-
 
