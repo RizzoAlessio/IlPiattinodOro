@@ -57,9 +57,9 @@ public class Premio {
     }
 
     public void newCopia(){
-        //genero l'ID della copia(vediamo come generarlo che non ho idea)/inseriamo noi l'ID
-        //richiamo il costruttore della copia, copia = costruttorecopia(ID);
-        //this.mappaCopiePremio.put(ID, copia);
+        String ID = this.ID + "" +  mappaCopiePremio.size();
+        copiaPremio copia = new copiaPremio(ID);
+        this.mappaCopiePremio.put(ID, copia);
     }
 
     @Override

@@ -9,9 +9,12 @@ public class IlPiattinodOro {
     private static IlPiattinodOro sistema;
     private Gioco currGioco;
     private Map<String, Gioco> GiochiDisponibili;
+    private Gioco currPremio;
+    private Map<String, Premio> mappaPremi;
     
     private IlPiattinodOro() {
         this.GiochiDisponibili= new HashMap<>();
+        this.mappaPremi= new HashMap<>();
         loadGiochi();
     }
     
@@ -38,12 +41,11 @@ public class IlPiattinodOro {
         }
     }
     
-    public void FineInserimento() {
+    public void FineInserimentoGioco() {
         if (currGioco != null) {
             this.GiochiDisponibili.put(currGioco.getCodice(), currGioco);
             System.out.println("Inserimento Concluso");
             }
-    
         }
 
 //temp    
@@ -72,7 +74,34 @@ public class IlPiattinodOro {
         public void getGioco(String IDgioco) {
             System.out.println(GiochiDisponibili.get(IDgioco));
         }
+
+        public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
+            this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
+            System.out.println("Inserito il premio");
+        }
     
+        public void FineInserimentoPremio() {
+            if (currPremio != null) {
+                this.mappaPremi.put(currPremio.getID(), currPremio);
+                System.out.println("Inserimento Concluso");
+                }
+            }
+
+        public List<Premio> getElencoPremi() {
+            List<Premio> listPremi = new ArrayList<>();
+            listPremi.addAll(mappaPremi.values());
+            System.out.println(mappaPremi);
+            return listPremi;
+        }
+
+        public Premio getPremioCorrente() {
+            System.out.println(currPremio);
+            return currPremio;
+        }
+
+        public void getPremio(String ID) {
+            System.out.println(mappaPremi.get(ID));
+        }
     }
 
 
