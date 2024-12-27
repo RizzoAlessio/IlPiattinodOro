@@ -5,11 +5,11 @@ public class copiaPremio {
         this.ID = ID;
     }
 
-    public getID(){
+    public String getID(){
         return ID;
     }
 
-    public setID(String ID){
+    public void setID(String ID){
         this.ID = ID;
     }
 }

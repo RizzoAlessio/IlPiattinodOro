@@ -17,35 +17,35 @@ public class Premio {
         this.Descrizione = Descrizione; 
     } 
 
-    public getID(){
+    public String getID(){
         return ID;
     }
 
-    public setID(String ID){
+    public void setID(String ID){
         this.ID = ID;
     }
 
-    public getNome(){
+    public String getNome(){
         return Nome;
     }
 
-    public setNome(String Nome){
+    public void setNome(String Nome){
         this.Nome = Nome;
     }
 
-    public getValore(){
+    public int getValore(){
         return Valore;
     }
 
-    public setValore(int Valore){
+    public void setValore(int Valore){
         this.Valore = Valore;
     }
 
-    public getDescrizione(){
+    public String getDescrizione(){
         return Descrizione;
     }
 
-    public setDescrizione(String Descrizione){
+    public void setDescrizione(String Descrizione){
         this.Descrizione = Descrizione;
     }
 
