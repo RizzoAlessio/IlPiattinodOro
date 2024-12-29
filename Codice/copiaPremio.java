@@ -1,7 +1,7 @@
-public class copiaPremio {
+public class CopiaPremio {
     private String ID;
 
-    public copiaPremio(String ID){
+    public CopiaPremio(String ID){
         this.ID = ID;
     }
 
