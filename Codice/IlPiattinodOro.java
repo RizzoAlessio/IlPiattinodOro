@@ -76,7 +76,15 @@ public class IlPiattinodOro {
 
         public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
             this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
-            System.out.println("Inserito il premio");
+            Scanner yn = new Scanner(System.in);
+            String d;
+            do{
+                this.currPremio.newCopia();
+                System.out.println("Inserito il premio");
+                System.out.println("Aggiungere copia (Y / N): ");
+                d = yn.next();
+            } while (d == "Y");
+            yn.close();
         }
     
         public void FineInserimentoPremio() {
