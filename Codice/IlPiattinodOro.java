@@ -15,12 +15,16 @@ public class IlPiattinodOro {
     private Map<String, Premio> mappaPremi;
     private Carta currCarta;
     private Map<String, Carta> CarteFedeltà;
+    private Cibo currCibo;
+    private Map<String, Cibo> mappaCibi;
+
     
     private IlPiattinodOro() {
         this.GiochiDisponibili= new HashMap<>();
         this.mappaPremi= new HashMap<>();
         this.CarteFedeltà = new HashMap<>();
         this.Colonna = new HashMap<>();
+        this.mappaCibi = new HashMap<>();
         loadGiochi();
         loadColonna();
     }
@@ -169,6 +173,51 @@ public class IlPiattinodOro {
             listCarte.addAll(CarteFedeltà.values());
             System.out.println(CarteFedeltà);
             return listCarte;
+        }
+
+        public void InserisciCibo(String IDCibo, String nome, String descizione) {
+            this.currCibo = new Gioco(IDCibo, nome, descrizione);
+            Scanner yn = new Scanner(System.in);
+            String d;
+            do{
+                this.currCibo.addQuantità();
+                System.out.println("Inserito il cibo");
+                System.out.println("Aggiungere copia (Y / N): ");
+                d = yn.next();
+            } while (d == "Y");
+            yn.close();
+        }
+
+        public void DefinisciCostoCibo(int prezzo) {
+            if (currCibo != null) {
+                    if(prezzo >= 1 && prezzo <= 30) this.currCibo.setCosto(prezzo);
+                    System.out.println("Prezzo inserito");
+            } else {
+                    System.out.println("Errore");
+            }
+        }
+
+        public void FineInserimentoCibo() {
+            if (currCibo != null) {
+                this.mappaCibi.put(currCibo.getCodice(), currCibo);
+                System.out.println("Inserimento Concluso");
+            }
+        }
+
+        public List<Cibo> getElencoCibi() {
+            List<Cibo> listCibi = new ArrayList<>();
+            listCibi.addAll(mappaCibi.values());
+            System.out.println(mappaCibi);
+            return listCibi;
+        }
+        
+        public Gioco getCiboCorrente() {
+            System.out.println(currCibo);
+            return currCibo;
+        }
+
+        public void getCibo(String IDCibo) {
+            System.out.println(mappaCibi.get(IDCibo));
         }
 
     }
