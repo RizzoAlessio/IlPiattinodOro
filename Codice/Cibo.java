@@ -8,8 +8,8 @@ public class Cibo {
 	private int costo;
 	private int quantità;
 
-	public Gioco(String IDcibo, String nome, String descrizione) {
-		this.IDcibo = IDcibo;
+	public Cibo (String IDcibo, String nome, String descrizione) {
+	this.IDcibo = IDcibo;
         this.nome = nome;
         this.descrizione = descrizione;
         this.costo = 0;
