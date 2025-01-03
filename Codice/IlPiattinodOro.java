@@ -175,8 +175,8 @@ public class IlPiattinodOro {
             return listCarte;
         }
 
-        public void InserisciCibo(String IDCibo, String nome, String descizione) {
-            this.currCibo = new Gioco(IDCibo, nome, descrizione);
+        public void InserisciCibo(String IDCibo, String nome, String descrizione) {
+            this.currCibo = new Cibo(IDCibo, nome, descrizione);
             Scanner yn = new Scanner(System.in);
             String d;
             do{
@@ -211,7 +211,7 @@ public class IlPiattinodOro {
             return listCibi;
         }
         
-        public Gioco getCiboCorrente() {
+        public Cibo getCiboCorrente() {
             System.out.println(currCibo);
             return currCibo;
         }
