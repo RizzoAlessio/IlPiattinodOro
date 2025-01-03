@@ -3,19 +3,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class IlPiattinodOro {
 
     private static IlPiattinodOro sistema;
     private Gioco currGioco;
+    private Map<String, Colonnina> Colonna;
     private Map<String, Gioco> GiochiDisponibili;
     private Premio currPremio;
     private Map<String, Premio> mappaPremi;
+    private Carta currCarta;
+    private Map<String, Carta> CarteFedeltà;
     
     private IlPiattinodOro() {
         this.GiochiDisponibili= new HashMap<>();
         this.mappaPremi= new HashMap<>();
+        this.CarteFedeltà = new HashMap<>();
+        this.Colonna = new HashMap<>();
         loadGiochi();
+        loadColonna();
     }
     
     public static IlPiattinodOro getInstance() {
@@ -26,7 +33,13 @@ public class IlPiattinodOro {
         } 
         return sistema;
     }
-    
+
+    public void loadColonna() {
+        Colonnina cln = new Colonnina("01", 100);
+        this.Colonna.put("01", cln);
+        System.out.println("Colonna Pronta");
+    }
+
     public void InserisciGioco(String IDgioco, String nome, String tipologia, int giocatori) {
         this.currGioco = new Gioco(IDgioco, nome, tipologia, giocatori, 0);
         System.out.println("Inserito il gioco");
@@ -47,7 +60,7 @@ public class IlPiattinodOro {
             System.out.println("Inserimento Concluso");
             }
         }
-   
+ 
     public void loadGiochi() {
             Gioco g1 = new Gioco("01", "Biliardo", "Tavolo", 4, 10);
             Gioco g2 = new Gioco("02", "Flipper", "Cabinati", 1, 5);
@@ -55,25 +68,25 @@ public class IlPiattinodOro {
             this.GiochiDisponibili.put("01", g1);
             this.GiochiDisponibili.put("02", g2);
             this.GiochiDisponibili.put("03", g3);
-            System.out.println("Caricamento Completato");
+            System.out.println("Caricamento Giochi Completato");
     }
     
-        public List<Gioco> getElencoGiochi() {
-            List<Gioco> listGiochi = new ArrayList<>();
-            listGiochi.addAll(GiochiDisponibili.values());
-            System.out.println(GiochiDisponibili);
-            return listGiochi;
-        }
+    public List<Gioco> getElencoGiochi() {
+        List<Gioco> listGiochi = new ArrayList<>();
+        listGiochi.addAll(GiochiDisponibili.values());
+        System.out.println(GiochiDisponibili);
+        return listGiochi;
+    }
     
-        public Gioco getGiocoCorrente() {
-            System.out.println(currGioco);
-            return currGioco;
-        }
+    public Gioco getGiocoCorrente() {
+        System.out.println(currGioco);
+        return currGioco;
+    }
     
-        public void getGioco(String IDgioco) {
-            System.out.println(GiochiDisponibili.get(IDgioco));
-        }
-
+    public void getGioco(String IDgioco) {
+        System.out.println(GiochiDisponibili.get(IDgioco));
+    }
+    //
         public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
             this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
             Scanner yn = new Scanner(System.in);
@@ -109,6 +122,54 @@ public class IlPiattinodOro {
         public void getPremio(String ID) {
             System.out.println(mappaPremi.get(ID));
         }
-    }
 
+        //
+        public void CreaNuovaCarta() {
+            int deposito = this.Colonna.get("01").getnumCarte();
+            System.out.println(deposito);
+            if(deposito != 0) this.currCarta = new Carta();
+            else System.err.println("CARTE ESAURITE, IMPOSSIBILE PROSEGUIRE");
+        }
+    
+        public void InserisciDocumento(String CF, String nome, String cognome) {
+            boolean registrato = false;
+            for (var entry : CarteFedeltà.entrySet()) {
+                String prec = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
+                if(prec == CF) registrato = true;
+            }
+            if(registrato == false) {
+                this.currCarta.creaCliente(CF, nome, cognome);
+                System.out.println("Cliente registrato");  
+            } else System.err.println("Cliente già registrato");
+        }
+
+        public int scegliTipologia(boolean VIP){
+            int prezzo = this.currCarta.scegliTipologia(VIP);
+            System.out.println("Il prezzo è di: " + prezzo + "€");
+            return prezzo;
+        }
+
+        public void Pagamento() {
+            
+            if (currCarta != null) {
+                this.CarteFedeltà.put(currCarta.getCodice(), currCarta);
+                int bianco = this.Colonna.get("01").remove();
+                System.out.println("Carta stampata " + bianco);
+                if(bianco == 0) System.err.println("CARTE ESAURITE, RICARICARICARE");
+            } 
+        }
+
+        public Carta getCartaCorrente() {
+            System.out.println(currCarta);
+            return currCarta;
+        }
+
+        public List<Carta> getElencoCarte() {
+            List<Carta> listCarte = new ArrayList<>();
+            listCarte.addAll(CarteFedeltà.values());
+            System.out.println(CarteFedeltà);
+            return listCarte;
+        }
+
+    }
 
