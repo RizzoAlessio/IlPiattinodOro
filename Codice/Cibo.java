@@ -8,8 +8,8 @@ public class Cibo {
 	private int costo;
 	private int quantità;
 
-	public Cibo (String IDcibo, String nome, String descrizione) {
-	this.IDcibo = IDcibo;
+	public Cibo(String IDcibo, String nome, String descrizione) {
+		this.IDcibo = IDcibo;
         this.nome = nome;
         this.descrizione = descrizione;
         this.costo = 0;
@@ -53,7 +53,7 @@ public class Cibo {
 
 	@Override
 	public String toString() {
-		return "Cibo{" + IDcibo + ": " + nome + ", descrizione:" + descrizione + "/n costo=" + costo + ", quantità=" + quantità + '}' + '\n';
+		return "Cibo{" + IDcibo + ": " + nome + ", descrizione:" + descrizione + '\n' + "costo=" + costo + ", quantità=" + quantità + '}' + '\n';
 	}
 
 }
