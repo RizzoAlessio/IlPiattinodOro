@@ -5,11 +5,13 @@ public class Cliente {
     private String CF;
 	private String nome;
     private String cognome;
+	private String cell;
 
 	public Cliente(String CF, String nome, String cognome ) {
 		this.CF = CF;
         this.nome = nome;
         this.cognome = cognome;
+		this.cell = null;
 	}
 
 	public String getCF() {
@@ -31,6 +33,14 @@ public class Cliente {
 	}
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
+	}
+
+	public String getCell(){
+		return cell;
+	}
+
+	public void setCell(String cell){
+		this.cell = cell;
 	}
     
 }

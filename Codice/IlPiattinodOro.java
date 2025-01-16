@@ -17,6 +17,8 @@ public class IlPiattinodOro {
     private Map<String, Carta> CarteFedeltà;
     private Cibo currCibo;
     private Map<String, Cibo> mappaCibi;
+    private Prenotazione currPrenotazione;
+    private Map<String, Prenotazione> mappaPrenotazioni;
 
 
     private IlPiattinodOro() {
@@ -25,6 +27,7 @@ public class IlPiattinodOro {
         this.CarteFedeltà = new HashMap<>();
         this.Colonna = new HashMap<>();
         this.mappaCibi = new HashMap<>();
+        this.mappaPrenotazioni = new HashMap<>();
         loadGiochi();
         loadColonna();
     }
@@ -272,4 +275,40 @@ public class IlPiattinodOro {
         System.out.println(mappaCibi.get(IDCibo));
     }
 
+    public List<String, String> disponibilita(String DataPrenotazione, int OraPrenotazione){
+        List<String, String> giochi = new ArrayList<>();
+        int tempo = 1;
+        for (var entry : mappaPrenotazioni.entrySet()){
+            String data = entry.getValue().getData();
+            String ora = entry.getValue(),getOra();
+            if(data == DataPrenotazione && ora > OraPrenotazione-tempo && ora < OraPrenotazione+tempo) {
+                giochi.add((entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
+            }
+        }
+        return giochi;
+    }
+
+    public void creaPrenotazione(String IDCarta, String IDGioco, int numPersone, String Data, String Ora){
+        Carta carta = CarteFedeltà.get(IDCarta);
+        Gioc gioco = GiochiDisponibili.get(IDGioco);
+        this.currPrenotazione = new Prenotazione(Data, Ora, numGiocatori, carta, gioco)
+    }
+
+    public void finePrenotazione(){
+        if (currPrenotazione != null) {
+            this.mappaPrenotazioni.put(currPrenotazione.getCodice(), currPrenotazione);
+            System.out.println("Inserimento Concluso");
+        }
+    }
+
+    public List<Prenotazione> getElencoPrenotazioni() {
+        List<Prenotazione> listPrenotazioni = new ArrayList<>();
+        listPrenotazioni.addAll(mappaPrenotazioni.values());
+        System.out.println(mappaPrenotazioni);
+        return listPrenotazioni;
+    }
+
+    public void inserimentoCell(String tel){
+        this.currCarta.inserisciCell(tel);
+    }
 }

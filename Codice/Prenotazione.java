@@ -1,5 +1,7 @@
 package main;
 
+import java.time.LocalDateTime;
+
 public class Prenotazione {
 
 	private String IDPrenotazione;
@@ -9,11 +11,11 @@ public class Prenotazione {
     private Carta CartaPrenotazione;
     private Gioco GiocoPrenotato;
 
-	public Prenotazione(String IDPrenotazione, String Data, int Ora, Carta CartaPrenotazione, Gioco GiocoPrenotato) {
-		this.IDPrenotazione = IDPrenotazione;
+	public Prenotazione(String Data, int Ora, int numGiocatori, Carta CartaPrenotazione, Gioco GiocoPrenotato) {
+		this.IDPrenotazione = this.IDcarta = "IPDO" + LocalDateTime.now().toString();;
         this.Data = Data;
         this.Ora = Ora;
-        this.numGiocatori = 0;
+        this.numGiocatori = numGiocatori;
         this.CartaPrenotazione = CartaPrenotazione;
         this.GiocoPrenotato = GiocoPrenotato;
 	}

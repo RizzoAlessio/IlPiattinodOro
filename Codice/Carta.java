@@ -66,6 +66,10 @@ public class Carta {
         return this.ClienteAssociato.get(this.IDcarta).getNome();
     }
 
+    public void inserisciCell(String cell){
+        this.ClienteAssociato.setCell(cell);
+    }
+
 	@Override
 	public String toString() {
 		return "Carta {" + IDcarta + ": Gettoni :" + numGettoni + "}" + "\n";
