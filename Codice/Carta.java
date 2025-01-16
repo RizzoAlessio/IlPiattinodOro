@@ -67,7 +67,7 @@ public class Carta {
     }
 
     public void inserisciCell(String cell){
-        this.ClienteAssociato.setCell(cell);
+        this.ClienteAssociato.get(this.IDcarta).setCell(cell);
     }
 
 	@Override

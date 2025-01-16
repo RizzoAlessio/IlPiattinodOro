@@ -275,23 +275,24 @@ public class IlPiattinodOro {
         System.out.println(mappaCibi.get(IDCibo));
     }
 
+    //TO MODIFY
     public List<String, String> disponibilita(String DataPrenotazione, int OraPrenotazione){
         List<String, String> giochi = new ArrayList<>();
         int tempo = 1;
         for (var entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
-            String ora = entry.getValue(),getOra();
-            if(data == DataPrenotazione && ora > OraPrenotazione-tempo && ora < OraPrenotazione+tempo) {
-                giochi.add((entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
+            int ora = entry.getValue().getOra();
+            if(data != DataPrenotazione && ora < OraPrenotazione-tempo && ora > OraPrenotazione+tempo) {
+                giochi.add(entry.getValue().getGiocoPrenotato().getNome(),  entry.getValue().getGiocoPrenotato().getCodice());
             }
         }
         return giochi;
     }
 
-    public void creaPrenotazione(String IDCarta, String IDGioco, int numPersone, String Data, String Ora){
+    public void creaPrenotazione(String IDCarta, String IDGioco, int numGiocatori, String Data, int Ora){
         Carta carta = CarteFedeltà.get(IDCarta);
-        Gioc gioco = GiochiDisponibili.get(IDGioco);
-        this.currPrenotazione = new Prenotazione(Data, Ora, numGiocatori, carta, gioco)
+        Gioco gioco = GiochiDisponibili.get(IDGioco);
+        this.currPrenotazione = new Prenotazione(Data, Ora, numGiocatori, carta, gioco);
     }
 
     public void finePrenotazione(){
