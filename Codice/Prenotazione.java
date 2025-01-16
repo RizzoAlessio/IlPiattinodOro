@@ -12,7 +12,7 @@ public class Prenotazione {
     private Gioco GiocoPrenotato;
 
 	public Prenotazione(String Data, int Ora, int numGiocatori, Carta CartaPrenotazione, Gioco GiocoPrenotato) {
-		this.IDPrenotazione = this.IDcarta = "IPDO" + LocalDateTime.now().toString();;
+		this.IDPrenotazione = "IPDOPR" + LocalDateTime.now().toString();
         this.Data = Data;
         this.Ora = Ora;
         this.numGiocatori = numGiocatori;
