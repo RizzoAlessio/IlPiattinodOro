@@ -1,4 +1,5 @@
 package main;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -276,14 +277,14 @@ public class IlPiattinodOro {
     }
 
     //TO MODIFY
-    public List<String, String> disponibilita(String DataPrenotazione, int OraPrenotazione){
-        List<String, String> giochi = new ArrayList<>();
+    public List<Tuple<String, String>> disponibilita(String DataPrenotazione, int OraPrenotazione){
+        List<Tuple<String, String>> giochi = new ArrayList<>();
         int tempo = 1;
         for (var entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
             int ora = entry.getValue().getOra();
             if(data != DataPrenotazione && ora < OraPrenotazione-tempo && ora > OraPrenotazione+tempo) {
-                giochi.add(entry.getValue().getGiocoPrenotato().getNome(),  entry.getValue().getGiocoPrenotato().getCodice());
+                giochi.add(new Tuple<>(entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
             }
         }
         return giochi;
