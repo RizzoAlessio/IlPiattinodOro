@@ -162,8 +162,8 @@ public class IlPiattinodOro {
             if(prec == CF) registrato = true;
         } if(registrato == false) {
             this.currCarta.creaCliente(CF, nome, cognome);
-            System.out.println("Cliente registrato");  
-        } else System.err.println("Cliente già registrato");
+            System.out.println("Cliente registrato"); 
+        } else { System.err.println("Cliente già registrato"); this.currCarta = null; }
     }
 
     public int scegliTipologia(boolean VIP){
@@ -179,6 +179,23 @@ public class IlPiattinodOro {
             System.out.println("Carta stampata " + bianco);
             if(bianco == 0) System.err.println("CARTE ESAURITE, RICARICARICARE");
         } 
+    }
+
+    public String recuperoCarta(String CF) {
+        String code = null;
+        for (var entry : CarteFedeltà.entrySet()) {
+            String reg = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
+            if(reg == CF) { code = entry.getValue().IDcarta; this.currCarta = entry.getValue();}
+        }
+        if( code == null){ System.err.println("Nessuna carta trovata"); return null; }
+        else { System.out.println("Carta trovata " + code ); return null; }
+    }
+
+    public void selezionaModalita(boolean mod) {
+        if(mod == true){ this.currCarta.changeCodice(); }
+        //*(Da rivedere)*\\
+        this.CarteFedeltà.remove(currCarta.IDcarta);
+        this.Pagamento();
     }
 
     public Carta getCartaCorrente() {

@@ -21,6 +21,9 @@ public class Carta {
 	public void setCodice(String IDcarta) {
 		this.IDcarta = IDcarta;
 	}
+    public void changeCodice(){
+        this.IDcarta = "IPDO" + LocalDateTime.now().toString();
+    }
 
     public int getGettoni() {
 		return numGettoni;
