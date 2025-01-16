@@ -176,9 +176,17 @@ public class IlPiattinodOro {
         if (currCarta != null) {
             this.CarteFedeltà.put(currCarta.getCodice(), currCarta);
             int bianco = this.Colonna.get("01").remove();
-            System.out.println("Carta stampata " + bianco);
+            System.out.println("Carta stampata, rimanenti " + bianco);
+            System.err.println("Pagare: " + costoCarta() + "€");
             if(bianco == 0) System.err.println("CARTE ESAURITE, RICARICARICARE");
         } 
+    }
+
+    public double costoCarta(){
+        double costo = this.currCarta.getTipologia();
+        if(this.currCarta.getGettoni() > 100)
+        costo += (this.currCarta.getGettoni() - 100) * 0.5;
+        return costo;
     }
 
     public String recuperoCarta(String CF) {
@@ -208,6 +216,7 @@ public class IlPiattinodOro {
         if(currCarta != null){
             this.currCarta.addGettoni(gettoni);
         }
+        System.err.println("Gettoni ricaricati, pagare: " + (gettoni * 0.5) + "€");
     }
 
     public Carta getCartaCorrente() {

@@ -7,6 +7,7 @@ import java.util.Map;
 public class Carta {
 
 	String IDcarta;
+    boolean VIP;
 	private int numGettoni;
     Map<String, Cliente> ClienteAssociato;
 
@@ -33,10 +34,20 @@ public class Carta {
         return numGettoni;
 	}
 
-
-    public int scegliTipologia(boolean VIP){
+    public int scegliTipologia(boolean isVIP){
         this.addGettoni(100);
-        if (VIP){
+        this.VIP = isVIP;
+        if(isVIP){
+            VIP cartavip = new VIP(this.IDcarta);
+            return cartavip.getCosto();
+        } else {
+            Base cartabase = new Base(this.IDcarta);
+            return cartabase.getCosto();
+        }
+    }
+
+    public int getTipologia(){
+        if(this.VIP){
             VIP cartavip = new VIP(this.IDcarta);
             return cartavip.getCosto();
         } else {
