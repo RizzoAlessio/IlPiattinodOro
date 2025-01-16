@@ -185,7 +185,7 @@ public class IlPiattinodOro {
         String code = null;
         for (var entry : CarteFedeltà.entrySet()) {
             String reg = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
-            if(reg == CF) { code = entry.getValue().IDcarta; this.currCarta = entry.getValue();}
+            if(reg == CF) { code = entry.getValue().IDcarta; this.inserisciCarta(code);}
         }
         if( code == null){ System.err.println("Nessuna carta trovata"); return null; }
         else { System.out.println("Carta trovata " + code ); return null; }
@@ -196,6 +196,18 @@ public class IlPiattinodOro {
         //*(Da rivedere)*\\
         this.CarteFedeltà.remove(currCarta.IDcarta);
         this.Pagamento();
+    }
+
+    public void inserisciCarta(String IDcarta){
+        for (var entry : CarteFedeltà.entrySet()) {
+            String ID = entry.getValue().getCodice();
+            if(ID == IDcarta) { this.currCarta = entry.getValue(); }
+        }
+    }
+    public void ricaricaGettoni(int gettoni){
+        if(currCarta != null){
+            this.currCarta.addGettoni(gettoni);
+        }
     }
 
     public Carta getCartaCorrente() {
