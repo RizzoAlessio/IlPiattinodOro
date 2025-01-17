@@ -278,15 +278,21 @@ public class IlPiattinodOro {
 
     //TO MODIFY
     public List<Tuple<String, String>> disponibilita(String DataPrenotazione, int OraPrenotazione){
+        List<Tuple<String, String>> giochinonprenotabili = new ArrayList<>();
         List<Tuple<String, String>> giochi = new ArrayList<>();
         int tempo = 1;
         for (var entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
             int ora = entry.getValue().getOra();
             if(data != DataPrenotazione && ora < OraPrenotazione-tempo && ora > OraPrenotazione+tempo) {
-                giochi.add(new Tuple<>(entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
+                giochinonprenotabili.add(new Tuple<>(entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
             }
         }
+        for (var entry : GiochiDisponibili.entrySet()){
+            giochi.add(new Tuple<>(entry.getValue().getNome(), entry.getKey()))
+        }
+        giochi.removeall(giochinonprenotabili);
+
         return giochi;
     }
 
