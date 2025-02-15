@@ -64,7 +64,7 @@ public class Prenotazione {
 
 	@Override
 	public String toString() {
-		return "Prenotazione di " + CartaPrenotazione.IDcarta +", " + IDPrenotazione + ": " + Data + ", " + Ora + ".\nGioco:" + GiocoPrenotato.getCodice() + ", numero giocatori=" + numGiocatori + '\n';
+		return "Prenotazione di " + CartaPrenotazione.getCodice() +", " + IDPrenotazione + ": " + Data + ", " + Ora + ".\nGioco:" + GiocoPrenotato.getCodice() + ", numero giocatori=" + numGiocatori + '\n';
 	}
 
 }

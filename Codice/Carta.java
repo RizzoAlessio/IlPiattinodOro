@@ -10,10 +10,12 @@ public class Carta {
     boolean VIP;
 	private int numGettoni;
     Map<String, Cliente> ClienteAssociato;
+    Map<String, Integer> Punteggio;
 
 	public Carta() {
         this.IDcarta = "IPDO" + LocalDateTime.now().toString();
         this.ClienteAssociato = new HashMap<>();
+        this.Punteggio = new HashMap<>();
 	}
 
 	public String getCodice() {
@@ -61,13 +63,18 @@ public class Carta {
         Cliente cl = new Cliente(CF, nome, cognome);
         this.ClienteAssociato.put(IDccl, cl);
     }
-
     public String getCliente(){
         return this.ClienteAssociato.get(this.IDcarta).getNome();
     }
-
     public void inserisciCell(String cell){
         this.ClienteAssociato.get(this.IDcarta).setCell(cell);
+    }
+
+    public void addPunti(String gioco, int punti){
+        this.Punteggio.put(gioco, punti);
+    }
+    public int getPunti(String gioco){
+        return this.Punteggio.get(gioco);
     }
 
 	@Override

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.time.LocalDate;
+
 
 public class IlPiattinodOro {
 
@@ -20,6 +22,8 @@ public class IlPiattinodOro {
     private Map<String, Cibo> mappaCibi;
     private Prenotazione currPrenotazione;
     private Map<String, Prenotazione> mappaPrenotazioni;
+    private Partita currPartita;
+    private Map<String, Partita> partiteAttuali;
 
 
     private IlPiattinodOro() {
@@ -200,7 +204,7 @@ public class IlPiattinodOro {
             if(reg == CF) { code = entry.getValue().IDcarta; this.inserisciCarta(code);}
         }
         if( code == null){ System.err.println("Nessuna carta trovata"); return null; }
-        else { System.out.println("Carta trovata " + code ); return null; }
+        else { System.out.println("Carta trovata " + code ); return code; }
     }
 
     public void selezionaModalita(boolean mod) {
@@ -221,6 +225,10 @@ public class IlPiattinodOro {
             this.currCarta.addGettoni(gettoni);
         }
         System.err.println("Gettoni ricaricati, pagare: " + (gettoni * 0.5) + "€");
+    }
+
+    public void inserimentoCell(String tel){
+        this.currCarta.inserisciCell(tel);
     }
 
     public Carta getCartaCorrente() {
@@ -276,23 +284,18 @@ public class IlPiattinodOro {
         System.out.println(mappaCibi.get(IDCibo));
     }
 
-    //TO MODIFY
+    //Prenotazione
     public List<Tuple<String, String>> disponibilita(String DataPrenotazione, int OraPrenotazione){
-        List<Tuple<String, String>> giochinonprenotabili = new ArrayList<>();
+        System.out.println("Giochi disponibili:");
         List<Tuple<String, String>> giochi = new ArrayList<>();
         int tempo = 1;
         for (var entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
             int ora = entry.getValue().getOra();
-            if(data != DataPrenotazione && ora < OraPrenotazione-tempo && ora > OraPrenotazione+tempo) {
-                giochinonprenotabili.add(new Tuple<>(entry.getValue().getGiocoPrenotato.getNome(), entry.getValue().getGiocoPrenotato.getCodice()));
+            if(data != DataPrenotazione && ora < (OraPrenotazione-tempo) && ora > (OraPrenotazione+tempo)) {
+                giochi.add(new Tuple<>(entry.getValue().getGiocoPrenotato().getNome(), entry.getValue().getGiocoPrenotato().getCodice()));
             }
         }
-        for (var entry : GiochiDisponibili.entrySet()){
-            giochi.add(new Tuple<>(entry.getValue().getNome(), entry.getKey()))
-        }
-        giochi.removeall(giochinonprenotabili);
-
         return giochi;
     }
 
@@ -316,7 +319,40 @@ public class IlPiattinodOro {
         return listPrenotazioni;
     }
 
-    public void inserimentoCell(String tel){
-        this.currCarta.inserisciCell(tel);
+    //Partita
+    public void richiestaPartita(String IDCarta, String IDGioco){
+        Carta carta = CarteFedeltà.get(IDCarta);
+        Gioco gioco = GiochiDisponibili.get(IDGioco);
+        if(carta.getGettoni() == gioco.getCosto()) System.out.println("Gettoni sufficenti");
     }
+
+    public void avviaPartita(String IDCarta, String IDGioco, int giocatori){
+        Carta carta = CarteFedeltà.get(IDCarta);
+        Gioco gioco = GiochiDisponibili.get(IDGioco);
+        CarteFedeltà.get(IDCarta).addGettoni(-gioco.getCosto());
+        String data = LocalDate.now().toString();
+        this.currPartita = new Partita(carta, gioco, giocatori, data);
+        this.partiteAttuali.put(currPartita.getCodice(), currPartita);   
+    }
+
+    public void finePartita(int punteggio){
+        this.currPartita.setPunteggio(punteggio);
+        String IDcarta = this.currPartita.getCarta().getCodice();
+        String IDgioco = this.currPartita.getGioco().getCodice();
+        CarteFedeltà.get(IDcarta).addPunti(IDgioco, punteggio);  
+    }
+    public void continua(boolean c){
+        if(c){
+            String IDcarta = this.currPartita.getCarta().getCodice();
+            String IDgioco = this.currPartita.getGioco().getCodice();
+            this.partiteAttuali.remove(currPartita.getCodice());
+            this.currPartita = null;
+            this.richiestaPartita(IDcarta, IDgioco);
+        } else {
+            this.partiteAttuali.remove(currPartita.getCodice());
+            this.currPartita = null;
+        }
+    }
+
 }
+
