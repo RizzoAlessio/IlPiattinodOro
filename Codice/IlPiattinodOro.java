@@ -261,6 +261,7 @@ public class IlPiattinodOro {
         String data = LocalDate.now().toString();
         this.currPartita = new Partita(carta, gioco, giocatori, data);
         String partita = currPartita.getCodice();
+        System.out.println("Avvio partita: " + partita);
         addPartita(partita, currPartita);  
     }
 
@@ -287,5 +288,24 @@ public class IlPiattinodOro {
         }
     }
 
-}
+    public void recuperaPartita(String gioco){
+        for (var entry : GiochiDisponibili.entrySet()) {
+            if(gioco == entry.getValue().getNome()){
+                String IDgioco = entry.getValue().getCodice();
+                for(var entity : partiteAttuali.entrySet()){
+                    if(entity.getValue().getGioco().getCodice() == IDgioco){
+                        String partita = entity.getValue().getCodice();
+                        System.out.println("Trovata partita per il gioco " + gioco + ": " + partita );
+                    }
+                }
+            }
+        } 
+    }
 
+    public Partita monitoraPartita(String IDpartita){
+        Partita vista = partiteAttuali.get(IDpartita);
+        System.out.println(vista);
+        return vista;
+    }
+
+}

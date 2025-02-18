@@ -10,7 +10,7 @@ public class Partita {
 	private String datainizio;
 
 	public Partita(Carta carta, Gioco gioco, int giocatori, String data) {
-		this.IDpartita = datainizio + carta.IDcarta.charAt(0)+gioco.getCodice().charAt(0);
+		this.IDpartita = data + carta.IDcarta.charAt(0)+gioco.getCodice().charAt(0);
         this.carta = carta;
         this.gioco = gioco;
         this.punteggio = 0;
