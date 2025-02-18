@@ -33,6 +33,7 @@ public class IlPiattinodOro {
         this.Colonna = new HashMap<>();
         this.mappaCibi = new HashMap<>();
         this.mappaPrenotazioni = new HashMap<>();
+        this.partiteAttuali = new HashMap<>();
         loadGiochi();
         loadColonna();
         this.gestore = new IlPiattinodOroCarta(GiochiDisponibili, Colonna);
@@ -227,7 +228,7 @@ public class IlPiattinodOro {
     }
 
     public void creaPrenotazione(String IDCarta, String IDGioco, int numGiocatori, String Data, int Ora){
-        Carta carta = CarteFedeltà.get(IDCarta);
+        Carta carta = this.gestore.getCarta(IDCarta);
         Gioco gioco = GiochiDisponibili.get(IDGioco);
         this.currPrenotazione = new Prenotazione(Data, Ora, numGiocatori, carta, gioco);
     }
@@ -248,25 +249,30 @@ public class IlPiattinodOro {
 
     //Partita
     public void richiestaPartita(String IDCarta, String IDGioco){
-        Carta carta = CarteFedeltà.get(IDCarta);
+        Carta carta = this.gestore.getCarta(IDCarta);
         Gioco gioco = GiochiDisponibili.get(IDGioco);
-        if(carta.getGettoni() == gioco.getCosto()) System.out.println("Gettoni sufficenti");
+        if(carta.getGettoni() >= gioco.getCosto()) System.out.println("Gettoni sufficenti");
     }
 
     public void avviaPartita(String IDCarta, String IDGioco, int giocatori){
-        Carta carta = CarteFedeltà.get(IDCarta);
+        Carta carta = this.gestore.getCarta(IDCarta);
         Gioco gioco = GiochiDisponibili.get(IDGioco);
-        CarteFedeltà.get(IDCarta).addGettoni(-gioco.getCosto());
+        this.gestore.getCarta(IDCarta).addGettoni(-gioco.getCosto());
         String data = LocalDate.now().toString();
         this.currPartita = new Partita(carta, gioco, giocatori, data);
-        this.partiteAttuali.put(currPartita.getCodice(), currPartita);   
+        String partita = currPartita.getCodice();
+        addPartita(partita, currPartita);  
+    }
+
+    private void addPartita(String p, Partita pt){
+        this.partiteAttuali.put(p, pt); 
     }
 
     public void finePartita(int punteggio){
         this.currPartita.setPunteggio(punteggio);
         String IDcarta = this.currPartita.getCarta().getCodice();
         String IDgioco = this.currPartita.getGioco().getCodice();
-        CarteFedeltà.get(IDcarta).addPunti(IDgioco, punteggio);  
+        this.gestore.getCarta(IDcarta).addPunti(IDgioco, punteggio);  
     }
     public void continua(boolean c){
         if(c){

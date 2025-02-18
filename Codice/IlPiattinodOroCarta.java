@@ -99,7 +99,9 @@ public class IlPiattinodOroCarta {
         System.out.println(currCarta);
         return currCarta;
     }
-
+    public Carta getCarta(String IDCarta) {
+        return this.CarteFedeltà.get(IDCarta);
+    }
     public List<Carta> getElencoCarte() {
         List<Carta> listCarte = new ArrayList<>();
         listCarte.addAll(CarteFedeltà.values());
