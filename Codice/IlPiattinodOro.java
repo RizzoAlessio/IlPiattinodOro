@@ -308,4 +308,20 @@ public class IlPiattinodOro {
         return vista;
     }
 
+    public void statoGioco(String IDgioco){
+        boolean onoff = GiochiDisponibili.get(IDgioco).getStato();
+        if(onoff){
+            for(var entity : partiteAttuali.entrySet()){
+                if(entity.getValue().getGioco().getCodice() == IDgioco){
+                    String partita = entity.getValue().getCodice();
+                    System.out.println("Il gioco è attivo e con partita in corso: " + partita);
+                } else {
+                    System.out.println("Il gioco è attivo e disponibile");
+                }
+            }
+        } else {
+            System.out.println("Il gioco da lei selezionato non è attivo, skill issue");
+        }
+    }
+
 }

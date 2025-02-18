@@ -7,6 +7,7 @@ public class Gioco {
 	private String tipologia;
 	private int giocatori;
 	private int costo;
+	private boolean attivo;
 
 	public Gioco(String IDgioco, String nome, String tipologia, int giocatori, int costo) {
 		this.IDgioco = IDgioco;
@@ -14,6 +15,7 @@ public class Gioco {
         this.tipologia = tipologia;
         this.giocatori = giocatori;
         this.costo = costo;
+		this.attivo = true;
 	}
 
 	public String getCodice() {
@@ -49,6 +51,13 @@ public class Gioco {
 	}
 	public void setCosto(int prezzo) {
 		this.costo = prezzo;
+	}
+
+	public boolean getStato() {
+		return attivo;
+	}
+	public void setStato(boolean state) {
+		this.attivo = state;
 	}
 
 	@Override
