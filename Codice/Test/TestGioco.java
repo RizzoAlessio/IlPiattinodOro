@@ -145,6 +145,9 @@ public class TestGioco {
         sistema.monitoraPartita("2025-02-18I0");
         sistema.statoGioco("01");
         sistema.statoGioco("02");
+        sistema.finePartita(1000);
+        sistema.continua(false);
+        sistema.inserisciTessera(ID);
     }
 
 }
