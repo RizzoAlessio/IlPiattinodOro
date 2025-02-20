@@ -106,29 +106,29 @@ public class IlPiattinodOro {
     //*(Da rivedere)*\\
     public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
         this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
-        Scanner yn = new Scanner(System.in); String d;
+        Scanner yn = new Scanner(System.in); Character d;
         boolean r = false;
         for (var entry : mappaPremi.entrySet()) {
             String premio = entry.getValue().getID();
-            if(premio == ID) r = true;
-        } if (r == false) {
+            if(premio.equals(ID)) r = true;
+        } if (!r) {
         do{
             this.currPremio.newCopia();
             System.out.println("Inserito il premio");
             System.out.println("Aggiungere copia (Y / N): ");
-            d = yn.next();
-        } while (d == "Y");
+            d = yn.next().charAt(0);
+        } while (d == 'Y');
             yn.close();
-        } else {    System.err.println("Gioco già registrato");
+        } else {    System.err.println("Premio già registrato");
             System.out.println("Aggiungere copia a quello scritto? (Y / N): ");
-            d = yn.next();
-            if(d == "Y"){
+            d = yn.next().charAt(0);
+            if(d == 'Y'){
                 do{
                     this.currPremio.newCopia();
                     System.out.println("Inserito il premio");
                     System.out.println("Aggiungere copia (Y / N): ");
-                    d = yn.next();
-                } while (d == "Y");
+                    d = yn.next().charAt(0);
+                } while (d == 'Y');
                 yn.close();
             }   
         }
@@ -273,7 +273,7 @@ public class IlPiattinodOro {
         this.currPartita.setPunteggio(punteggio);
         String IDcarta = this.currPartita.getCarta().getCodice();
         String IDgioco = this.currPartita.getGioco().getCodice();
-        this.gestore.getCarta(IDcarta).addPunti(IDgioco, punteggio);  
+        this.gestore.getCarta(IDcarta).addPunti(IDgioco, punteggio);
     }
     public void continua(boolean c){
         if(c){
@@ -322,6 +322,23 @@ public class IlPiattinodOro {
         } else {
             System.out.println("Il gioco da lei selezionato non è attivo, skill issue");
         }
+    }
+
+    public void inserisciTessera(String IDcarta){
+        Carta tessera = this.gestore.getCarta(IDcarta);
+        int totalP = 0;
+        for(var entry : tessera.Punteggio.entrySet()){
+            totalP += entry.getValue();
+        } 
+        System.out.println("Sono disponibili " + totalP + " punti");
+    }
+
+    public void cercaPremio(int costo){
+        for(var entry : mappaPremi.entrySet()){
+            if(entry.getValue().getValore() <= costo) {
+                System.out.println("Premio " + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore());
+            }
+        } 
     }
 
 }
