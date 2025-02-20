@@ -66,6 +66,11 @@ public class Premio {
         this.mappaCopiePremio.put(ID, copia);
     }
 
+    public void removeCopia(String IDcopia){
+        String ID = IDcopia + "" +  mappaCopiePremio.size();
+        this.mappaCopiePremio.remove(ID);
+    }
+
     @Override
 	public String toString() {
 		return "Premio{" + ID + ": " + Nome + ", valore = " + Valore + "\n Descrizione: " + Descrizione + "}\n";

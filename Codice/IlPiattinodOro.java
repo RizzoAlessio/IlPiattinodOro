@@ -35,6 +35,7 @@ public class IlPiattinodOro {
         this.mappaPrenotazioni = new HashMap<>();
         this.partiteAttuali = new HashMap<>();
         loadGiochi();
+        loadPremi();
         loadColonna();
         this.gestore = new IlPiattinodOroCarta(GiochiDisponibili, Colonna);
     }
@@ -103,7 +104,7 @@ public class IlPiattinodOro {
     }
 
     //Gestione Premio
-    //*(Da rivedere)*\\
+    /*(Da rivedere)
     public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
         this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
         Scanner yn = new Scanner(System.in); Character d;
@@ -132,6 +133,11 @@ public class IlPiattinodOro {
                 yn.close();
             }   
         }
+    }*/
+
+    public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
+        this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
+        this.currPremio.newCopia();
     }
     
     public void FineInserimentoPremio() {
@@ -156,6 +162,11 @@ public class IlPiattinodOro {
     public void getPremio(String ID) {
         System.out.println(mappaPremi.get(ID));
     }
+    public void loadPremi() {
+        Premio p1 = new Premio("001", "Trombone", 999, "Trombone");
+        this.mappaPremi.put("001", p1);
+        System.out.println("Caricamento Premi Completato");
+}
 
     //Gestione Carta
     public void CreaNuovaCarta() { this.gestore.CreaNuovaCarta(); }
@@ -336,9 +347,18 @@ public class IlPiattinodOro {
     public void cercaPremio(int costo){
         for(var entry : mappaPremi.entrySet()){
             if(entry.getValue().getValore() <= costo) {
-                System.out.println("Premio " + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore());
+                System.out.println("Premio "+ entry.getValue().getID() + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore());
             }
         } 
+    }
+    public void scegliPremio(String IDp, String IDc){
+        for(var entry : mappaPremi.entrySet()){
+            if(entry.getValue().getID().equals(IDp)) {
+                this.gestore.getCarta(IDc).removePunti(entry.getValue().getValore());
+                entry.getValue().removeCopia(IDp);
+            }
+        }
+        this.inserisciTessera(IDc);
     }
 
 }

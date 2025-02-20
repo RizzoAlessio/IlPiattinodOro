@@ -70,12 +70,14 @@ public class Carta {
         this.ClienteAssociato.get(this.IDcarta).setCell(cell);
     }
 
-    public void addPunti(String gioco, int punti){
-        this.Punteggio.put(gioco, punti);
+    public void addPunti(String gioco, int punti){  this.Punteggio.merge(gioco, punti, Integer::sum);   }
+    public void removePunti(int punti){
+        for(var entry : this.Punteggio.entrySet()){
+            if(entry.getValue() >= punti){ addPunti(entry.getKey(), -punti); punti = 0; break;}
+            else{ punti -= entry.getValue(); addPunti(entry.getKey(), -entry.getValue());}
+        }  
     }
-    public int getPunti(String gioco){
-        return this.Punteggio.get(gioco);
-    }
+    public int getPunti(String gioco){  return this.Punteggio.get(gioco);   }
 
 	@Override
 	public String toString() {
