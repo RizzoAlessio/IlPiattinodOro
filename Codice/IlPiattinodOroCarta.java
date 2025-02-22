@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class IlPiattinodOroCarta {
@@ -29,7 +30,7 @@ public class IlPiattinodOroCarta {
     
     public void InserisciDocumento(String CF, String nome, String cognome) {
         boolean registrato = false;
-        for (var entry : CarteFedeltà.entrySet()) {
+        for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
             String prec = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
             if(prec == CF) registrato = true;
         } if(registrato == false) {
@@ -63,7 +64,7 @@ public class IlPiattinodOroCarta {
 
     public String recuperoCarta(String CF) {
         String code = null;
-        for (var entry : CarteFedeltà.entrySet()) {
+        for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
             String reg = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
             if(reg == CF) { code = entry.getValue().IDcarta; this.inserisciCarta(code);}
         }
@@ -79,7 +80,7 @@ public class IlPiattinodOroCarta {
     }
 
     public void inserisciCarta(String IDcarta){
-        for (var entry : CarteFedeltà.entrySet()) {
+        for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
             String ID = entry.getValue().getCodice();
             if(ID == IDcarta) { this.currCarta = entry.getValue(); }
         }

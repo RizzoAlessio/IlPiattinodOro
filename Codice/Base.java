@@ -1,18 +1,16 @@
 package main;
 
-public class Base extends Carta {
+public class Base implements StatoCarta {
     
-    private int costoBase = 15;
+    private int costo = 15;
 
-    public Base(String IDcarta) {
-        this.IDcarta = IDcarta;
-    }
+    public Base(){}
 
     public int getCosto() {
-		return costoBase;
+		return costo;
 	}
 	public void setCosto(int costo) {
-		this.costoBase = costo;
+		this.costo = costo;
 	}
     
 }

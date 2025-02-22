@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.Map.Entry;
 import java.time.LocalDate;
 
 
@@ -228,7 +228,7 @@ public class IlPiattinodOro {
         System.out.println("Giochi disponibili:");
         List<Tuple<String, String>> giochi = new ArrayList<>();
         int tempo = 1;
-        for (var entry : mappaPrenotazioni.entrySet()){
+        for (Entry<String, Prenotazione> entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
             int ora = entry.getValue().getOra();
             if(data != DataPrenotazione && ora < (OraPrenotazione-tempo) && ora > (OraPrenotazione+tempo)) {
@@ -300,10 +300,10 @@ public class IlPiattinodOro {
     }
 
     public void recuperaPartita(String gioco){
-        for (var entry : GiochiDisponibili.entrySet()) {
+        for (Entry<String, Gioco> entry : GiochiDisponibili.entrySet()) {
             if(gioco == entry.getValue().getNome()){
                 String IDgioco = entry.getValue().getCodice();
-                for(var entity : partiteAttuali.entrySet()){
+                for(Entry<String, Partita> entity : partiteAttuali.entrySet()){
                     if(entity.getValue().getGioco().getCodice() == IDgioco){
                         String partita = entity.getValue().getCodice();
                         System.out.println("Trovata partita per il gioco " + gioco + ": " + partita );
@@ -322,7 +322,7 @@ public class IlPiattinodOro {
     public void statoGioco(String IDgioco){
         boolean onoff = GiochiDisponibili.get(IDgioco).getStato();
         if(onoff){
-            for(var entity : partiteAttuali.entrySet()){
+            for(Entry<String, Partita> entity : partiteAttuali.entrySet()){
                 if(entity.getValue().getGioco().getCodice() == IDgioco){
                     String partita = entity.getValue().getCodice();
                     System.out.println("Il gioco è attivo e con partita in corso: " + partita);
@@ -331,28 +331,28 @@ public class IlPiattinodOro {
                 }
             }
         } else {
-            System.out.println("Il gioco da lei selezionato non è attivo, skill issue");
+            System.out.println("Il gioco da lei selezionato non è attivo");
         }
     }
 
     public void inserisciTessera(String IDcarta){
         Carta tessera = this.gestore.getCarta(IDcarta);
         int totalP = 0;
-        for(var entry : tessera.Punteggio.entrySet()){
+        for(Entry<String, Integer> entry : tessera.Punteggio.entrySet()){
             totalP += entry.getValue();
         } 
         System.out.println("Sono disponibili " + totalP + " punti");
     }
 
     public void cercaPremio(int costo){
-        for(var entry : mappaPremi.entrySet()){
+        for(Entry<String, Premio> entry : mappaPremi.entrySet()){
             if(entry.getValue().getValore() <= costo) {
                 System.out.println("Premio "+ entry.getValue().getID() + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore());
             }
         } 
     }
     public void scegliPremio(String IDp, String IDc){
-        for(var entry : mappaPremi.entrySet()){
+        for(Entry<String, Premio> entry : mappaPremi.entrySet()){
             if(entry.getValue().getID().equals(IDp)) {
                 this.gestore.getCarta(IDc).removePunti(entry.getValue().getValore());
                 entry.getValue().removeCopia(IDp);

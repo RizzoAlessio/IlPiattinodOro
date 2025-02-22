@@ -3,11 +3,13 @@ package main;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Carta {
 
 	String IDcarta;
-    boolean VIP;
+    boolean state;
+    private StatoCarta TipoCarta; 
 	private int numGettoni;
     Map<String, Cliente> ClienteAssociato;
     Map<String, Integer> Punteggio;
@@ -38,24 +40,17 @@ public class Carta {
 
     public int scegliTipologia(boolean isVIP){
         this.addGettoni(100);
-        this.VIP = isVIP;
+        this.state = isVIP;
         if(isVIP){
-            VIP cartavip = new VIP(this.IDcarta);
-            return cartavip.getCosto();
+            TipoCarta = new VIP();
         } else {
-            Base cartabase = new Base(this.IDcarta);
-            return cartabase.getCosto();
+            TipoCarta = new Base();
         }
+        return TipoCarta.getCosto();
     }
 
     public int getTipologia(){
-        if(this.VIP){
-            VIP cartavip = new VIP(this.IDcarta);
-            return cartavip.getCosto();
-        } else {
-            Base cartabase = new Base(this.IDcarta);
-            return cartabase.getCosto();
-        }
+        return this.TipoCarta.getCosto();
     }
 
     public void creaCliente(String CF, String nome, String cognome){
@@ -72,7 +67,7 @@ public class Carta {
 
     public void addPunti(String gioco, int punti){  this.Punteggio.merge(gioco, punti, Integer::sum);   }
     public void removePunti(int punti){
-        for(var entry : this.Punteggio.entrySet()){
+        for(Entry<String, Integer> entry : this.Punteggio.entrySet()){
             if(entry.getValue() >= punti){ addPunti(entry.getKey(), -punti); punti = 0; break;}
             else{ punti -= entry.getValue(); addPunti(entry.getKey(), -entry.getValue());}
         }  

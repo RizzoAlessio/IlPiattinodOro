@@ -1,18 +1,16 @@
 package main;
 
-public class VIP extends Carta {
+public class VIP implements StatoCarta {
     
-    private int costoVIP = 25;
+    private int costo = 25;
 
-    public VIP(String IDcarta) {
-        this.IDcarta = IDcarta;
-    }
+    public VIP() {}
 
     public int getCosto() {
-		return costoVIP;
+		return costo;
 	}
 	public void setCosto(int costo) {
-		this.costoVIP = costo;
+		this.costo = costo;
 	}
     
 }
