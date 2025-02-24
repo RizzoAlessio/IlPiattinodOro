@@ -17,10 +17,10 @@ public class IlPiattinodOro {
     private Gioco currGioco;
     public Map<String, Gioco> GiochiDisponibili;
     private Premio currPremio;
-    private Map<String, Premio> mappaPremi;
+    public Map<String, Premio> mappaPremi;
     private Map<String, Carta> CarteFedeltà;
     private Cibo currCibo;
-    private Map<String, Cibo> mappaCibi;
+    public Map<String, Cibo> mappaCibi;
     private Prenotazione currPrenotazione;
     private Map<String, Prenotazione> mappaPrenotazioni;
     private Partita currPartita;

@@ -9,10 +9,11 @@ import javax.swing.*;
 public class GUI{
 
     static IlPiattinodOro sistema;
-    public static JTextArea textField, textLista, textList;
+    public static JTextArea textField, textLista, textListaP, textListaC, textList;
     public static JLabel n1, n2, n3, n4;
     public static JTextField n11, n22, n33, n44;
     public static JButton add;
+    public static JPanel GiocoButtons, PremioButtons, CiboButtons;
 
     private static JMenuBar Menu(){
         JMenuBar menu = new JMenuBar();
@@ -22,11 +23,29 @@ public class GUI{
             mGioco.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("area");
+                    GiocoButtons.setVisible(true);
+                    PremioButtons.setVisible(false);
+                    CiboButtons.setVisible(false);
                 }
             });
             JMenuItem mCibo = new JMenuItem("Area Cibo");
+            mCibo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PremioButtons.setVisible(false);
+                    GiocoButtons.setVisible(false);
+                    CiboButtons.setVisible(true);
+                }
+            });
             JMenuItem mPremio = new JMenuItem("Area Premio");
+            mPremio.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PremioButtons.setVisible(true);
+                    GiocoButtons.setVisible(false);
+                    CiboButtons.setVisible(false);
+                }
+            });
         JMenuItem mCheck = new JMenuItem("Area Dipendenti");
             y.add(mGioco);  y.add(mCibo);y.add(mPremio);
             x.add(y); x.add(mCheck);
@@ -59,9 +78,16 @@ public class GUI{
         
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        textField = new JTextArea();
+        /*textField = new JTextArea();
         textField.setLineWrap(true);
         content.add(textField);
+        utton5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(textField.getText());
+            }
+        });*/
+
         textLista = new JTextArea();
         textLista.setLineWrap(true);
             n1 = new JLabel("Nome Gioco"); n11 = new JTextField(10);
@@ -85,17 +111,59 @@ public class GUI{
             textLista.setVisible(false);
         content.add(textLista);
 
+        textListaP = new JTextArea();
+        textListaP.setLineWrap(true);
+            n1 = new JLabel("Nome Premio"); n11 = new JTextField(10);
+            n2 = new JLabel("Valore"); n22 = new JTextField(10);
+            n3 = new JLabel("Descrizione"); n33 = new JTextField(10);
+            n4 = new JLabel("Numero Copie"); n44 = new JTextField(10);
+            add = new JButton("Aggiungi");
+            textListaP.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            textListaP.add(n1); textListaP.add(n11); textListaP.add(n2); textListaP.add(n22);
+            textListaP.add(n3); textListaP.add(n33); textListaP.add(n4); textListaP.add(n44);
+            textListaP.add(add);
+                add.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String IDpremio = '0' + Integer.toString(sistema.mappaPremi.size() + 1);
+                        sistema.InserisciPremio(IDpremio, n11.getText(), Integer.parseInt(n22.getText()), n33.getText(), Integer.parseInt(n44.getText()));
+                        sistema.FineInserimentoPremio();
+                    }
+                });
+            textListaP.setVisible(false);
+        content.add(textListaP);
+
+        textListaC = new JTextArea();
+        textListaC.setLineWrap(true);
+            n1 = new JLabel("Nome Cibo"); n11 = new JTextField(10);
+            n2 = new JLabel("Descrizione"); n22 = new JTextField(10);
+            n3 = new JLabel("Costo"); n33 = new JTextField(10);
+            n4 = new JLabel("Numero Copie"); n44 = new JTextField(10);
+            add = new JButton("Aggiungi");
+            textListaC.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            textListaC.add(n1); textListaC.add(n11); textListaC.add(n2); textListaC.add(n22);
+            textListaC.add(n4); textListaC.add(n44); textListaC.add(n3); textListaC.add(n33);
+            textListaC.add(add);
+                add.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String IDcibo = '0' + Integer.toString(sistema.mappaCibi.size() + 1);
+                        sistema.InserisciCibo(IDcibo, n11.getText(), n22.getText(), Integer.parseInt(n44.getText()));
+                        sistema.DefinisciCostoCibo(Integer.parseInt(n33.getText()));
+                        sistema.FineInserimentoCibo();
+                    }
+                });
+            textListaC.setVisible(false);
+        content.add(textListaC);
+
         textList = new JTextArea();
         textList.setLineWrap(true);
         textList.setVisible(false);
         content.add(textList);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        GiocoButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton button1 = new JButton("Elenco giochi");
         JButton button2 = new JButton("Aggiungi gioco");
-        JButton button3 = new JButton("Elenco Premi");
-        JButton button4 = new JButton("Aggiungi Cibo");
-        JButton button5 = new JButton("Scrivi");
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -106,7 +174,7 @@ public class GUI{
                 textList.append(sistema.getElencoGiochi().toString());
             }
         });
-        buttons.add(button1);
+        GiocoButtons.add(button1);
 
         button2.addActionListener(new ActionListener() {
             @Override
@@ -114,37 +182,59 @@ public class GUI{
                 textLista.setVisible(!textLista.isVisible());
             }
         });
-        buttons.add(button2);
+        GiocoButtons.add(button2);
+    
+        GiocoButtons.setVisible(false);
+        content.add(GiocoButtons);
+
+        PremioButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton button3 = new JButton("Elenco Premi");
+        JButton button4 = new JButton("Aggiungi Premi");
 
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                textList.setVisible(!textList.isVisible());
                 textList.selectAll();
                 textList.replaceSelection("");
                 textList.append(sistema.getElencoPremi().toString());
             }
         });
-        buttons.add(button3);
-
+        PremioButtons.add(button3);
         button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                textListaP.setVisible(!textListaP.isVisible());
+            }
+        });
+        PremioButtons.add(button4);
+        PremioButtons.setVisible(false);
+        content.add(PremioButtons);
+
+        CiboButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton button5 = new JButton("Elenco Cibo");
+        JButton button6 = new JButton("Aggiungi Cibo");
+
+        button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textList.setVisible(!textList.isVisible());
                 textList.selectAll();
                 textList.replaceSelection("");
                 textList.append(sistema.getElencoCibi().toString());
             }
         });
-        buttons.add(button4);
-
-        button5.addActionListener(new ActionListener() {
+        CiboButtons.add(button5);
+        button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(textField.getText());
+                textListaC.setVisible(!textListaP.isVisible());
             }
         });
-        buttons.add(button5);
+        CiboButtons.add(button6);
+        CiboButtons.setVisible(false);
+        content.add(CiboButtons);
 
-        content.add(buttons);
         frame.add(content, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(800,600);
