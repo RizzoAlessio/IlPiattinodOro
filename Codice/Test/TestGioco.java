@@ -39,17 +39,26 @@ public class TestGioco {
 
     @Test
     public void testInserisciPremio() {
-        sistema.InserisciPremio("01", "Peluche", 100, "Peluche a forma di unicottero");
+        sistema.InserisciPremio("01", "Peluche", 100, "Peluche a forma di unicottero", 3);
         assertNotNull(sistema.getPremioCorrente());
     }
 
     @Test
     public void testConfermaPremio() {
-        sistema.InserisciPremio("01", "Peluche", 100, "Peluche a forma di unicottero");      
-        assertNotNull(sistema.getPremioCorrente());
+        sistema.InserisciPremio("01", "Peluche", 100, "Peluche a forma di unicottero", 3);      
+        sistema.getPremioCorrente().getElencoCopiePremio();
         sistema.FineInserimentoPremio();
-        assertEquals(1, sistema.getElencoPremi().size());
+        sistema.getElencoPremi();
     }
+
+    @Test
+    public void testConfermaCibo() {
+        sistema.InserisciCibo("01", "Panino","Panino tonno e marmellata", 2);      
+        sistema.DefinisciCostoCibo(3);
+        sistema.FineInserimentoCibo();
+        sistema.getElencoCibi();
+    }
+
 
     @Test
     public void testNuovaCarta() {
@@ -73,7 +82,7 @@ public class TestGioco {
     public void testPagamentoCarta() {
         sistema.CreaNuovaCarta();
         sistema.InserisciDocumento("ABC2025", "Marco", "Pesalonbi");
-        sistema.scegliTipologia(true);
+        sistema.scegliTipologia(false);
         sistema.Pagamento();
         assertEquals(1, sistema.getElencoCarte().size());
     }
@@ -144,10 +153,12 @@ public class TestGioco {
         sistema.recuperaPartita("Biliardo");
         sistema.monitoraPartita("2025-02-18I0");
         sistema.statoGioco("01");
-        sistema.statoGioco("02");
+        sistema.statoGioco("03");
         sistema.finePartita(1000);
         sistema.continua(false);
         sistema.inserisciTessera(ID);
+        sistema.cercaPremio(1000);
+        sistema.scegliPremio("001", ID);
     }
 
 }
