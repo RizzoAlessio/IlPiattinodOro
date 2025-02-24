@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Premio {
+public class Premio implements java.lang.Cloneable{
     
     private String ID;
     private String Nome;
     private int Valore;
     private String Descrizione;
-    Map<String, CopiaPremio> mappaCopiePremio;
+    Map<String, Premio> mappaCopiePremio;
 
 
     public Premio(String ID, String Nome, int Valore, String Descrizione){
@@ -53,8 +53,8 @@ public class Premio {
         this.Descrizione = Descrizione;
     }
 
-    public List<CopiaPremio> getElencoCopiePremio() {
-        List<CopiaPremio> listCopiePremio = new ArrayList<>();
+    public List<Premio> getElencoCopiePremio() {
+        List<Premio> listCopiePremio = new ArrayList<>();
         listCopiePremio.addAll(mappaCopiePremio.values());
         System.out.println(mappaCopiePremio);
         return listCopiePremio;
@@ -62,8 +62,7 @@ public class Premio {
 
     public void newCopia(){
         String ID = this.ID + "" +  mappaCopiePremio.size();
-        CopiaPremio copia = new CopiaPremio(ID);
-        this.mappaCopiePremio.put(ID, copia);
+        this.mappaCopiePremio.put(ID, this);
     }
 
     public void removeCopia(String IDcopia){
@@ -73,7 +72,8 @@ public class Premio {
 
     @Override
 	public String toString() {
-		return "Premio{" + ID + ": " + Nome + ", valore = " + Valore + "\n Descrizione: " + Descrizione + "}\n";
+		return "" + ID + ": " + Nome + ", valore = " + Valore + ", quantità: " + mappaCopiePremio.size()
+        + "\n Descrizione: " + Descrizione + "}\n";
 	}
 }
 

@@ -11,10 +11,11 @@ import java.time.LocalDate;
 public class IlPiattinodOro {
 
     private static IlPiattinodOro sistema;
-    private IlPiattinodOroCarta gestore;
+    public IlPiattinodOroCarta gestore;
+    public IlPiattinodOroPartita arbitro;
     private Map<String, Colonnina> Colonna;
     private Gioco currGioco;
-    private Map<String, Gioco> GiochiDisponibili;
+    public Map<String, Gioco> GiochiDisponibili;
     private Premio currPremio;
     private Map<String, Premio> mappaPremi;
     private Map<String, Carta> CarteFedeltà;
@@ -23,7 +24,7 @@ public class IlPiattinodOro {
     private Prenotazione currPrenotazione;
     private Map<String, Prenotazione> mappaPrenotazioni;
     private Partita currPartita;
-    private Map<String, Partita> partiteAttuali;
+    public Map<String, Partita> partiteAttuali;
 
 
     private IlPiattinodOro() {
@@ -38,6 +39,7 @@ public class IlPiattinodOro {
         loadPremi();
         loadColonna();
         this.gestore = new IlPiattinodOroCarta(GiochiDisponibili, Colonna);
+        this.arbitro = new IlPiattinodOroPartita(GiochiDisponibili, gestore);
     }
     
     public static IlPiattinodOro getInstance() {
@@ -80,7 +82,7 @@ public class IlPiattinodOro {
     public void loadGiochi() {
             Gioco g1 = new Gioco("01", "Biliardo", "Tavolo", 4, 10);
             Gioco g2 = new Gioco("02", "Flipper", "Cabinati", 1, 5);
-            Gioco g3 = new Gioco("03", "SpaceBattle", "Cabinati", 2, 10);
+            Gioco g3 = new Gioco("03", "SpaceBattle", "Cabinati", 2, 10); g3.setStato(false);
             this.GiochiDisponibili.put("01", g1);
             this.GiochiDisponibili.put("02", g2);
             this.GiochiDisponibili.put("03", g3);
@@ -103,43 +105,22 @@ public class IlPiattinodOro {
         System.out.println(GiochiDisponibili.get(IDgioco));
     }
 
+    public void statoGioco(String IDgioco){
+        boolean onoff = new GiocoOn(sistema).recover(IDgioco); 
+        if(onoff) new GiocoOn(sistema).taken();
+        else new GiocoOff(sistema).taken();
+    }
+
     //Gestione Premio
-    /*(Da rivedere)
-    public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
+ 
+    public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione, int NCopie) {
         this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
-        Scanner yn = new Scanner(System.in); Character d;
-        boolean r = false;
-        for (var entry : mappaPremi.entrySet()) {
-            String premio = entry.getValue().getID();
-            if(premio.equals(ID)) r = true;
-        } if (!r) {
         do{
             this.currPremio.newCopia();
-            System.out.println("Inserito il premio");
-            System.out.println("Aggiungere copia (Y / N): ");
-            d = yn.next().charAt(0);
-        } while (d == 'Y');
-            yn.close();
-        } else {    System.err.println("Premio già registrato");
-            System.out.println("Aggiungere copia a quello scritto? (Y / N): ");
-            d = yn.next().charAt(0);
-            if(d == 'Y'){
-                do{
-                    this.currPremio.newCopia();
-                    System.out.println("Inserito il premio");
-                    System.out.println("Aggiungere copia (Y / N): ");
-                    d = yn.next().charAt(0);
-                } while (d == 'Y');
-                yn.close();
-            }   
-        }
-    }*/
-
-    public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione) {
-        this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
-        this.currPremio.newCopia();
+            NCopie--;
+        } while(NCopie > 0);
     }
-    
+
     public void FineInserimentoPremio() {
         if (currPremio != null) {
             this.mappaPremi.put(currPremio.getID(), currPremio);
@@ -162,9 +143,10 @@ public class IlPiattinodOro {
     public void getPremio(String ID) {
         System.out.println(mappaPremi.get(ID));
     }
+
     public void loadPremi() {
-        Premio p1 = new Premio("001", "Trombone", 999, "Trombone");
-        this.mappaPremi.put("001", p1);
+        InserisciPremio("001", "Trombone", 999, "Trombone", 1);
+        FineInserimentoPremio();
         System.out.println("Caricamento Premi Completato");
 }
 
@@ -183,12 +165,13 @@ public class IlPiattinodOro {
     public List<Carta> getElencoCarte() { return this.gestore.getElencoCarte(); }
 
     //Cibo
-    //*(Da rivedere)*\\
-    public void InserisciCibo(String IDCibo, String nome, String descrizione, int q) {
+    
+    public void InserisciCibo(String IDCibo, String nome, String descrizione, int CCopie) {
         this.currCibo = new Cibo(IDCibo, nome, descrizione);
-        for(int i = 0; i < q; i++){
-            this.currCibo.addQuantità();
-        }
+        do{
+            this.currCibo.newQuantita();
+            CCopie--;
+        } while(CCopie > 0);
     }
 
     public void DefinisciCostoCibo(int prezzo) {
@@ -259,82 +242,14 @@ public class IlPiattinodOro {
     }
 
     //Partita
-    public void richiestaPartita(String IDCarta, String IDGioco){
-        Carta carta = this.gestore.getCarta(IDCarta);
-        Gioco gioco = GiochiDisponibili.get(IDGioco);
-        if(carta.getGettoni() >= gioco.getCosto()) System.out.println("Gettoni sufficenti");
-    }
+    public void richiestaPartita(String IDCarta, String IDGioco){ this.arbitro.richiestaPartita(IDCarta, IDGioco);}
+    public void avviaPartita(String IDCarta, String IDGioco, int giocatori){this.arbitro.avviaPartita(IDCarta, IDGioco, giocatori);}
+    public void finePartita(int punteggio){ this.arbitro.finePartita(punteggio);}
+    public void continua(boolean c){ this.arbitro.continua(c);}
+    public void recuperaPartita(String gioco){ this.arbitro.recuperaPartita(gioco);}
+    public Partita monitoraPartita(String IDpartita){ return this.arbitro.monitoraPartita(IDpartita);}
 
-    public void avviaPartita(String IDCarta, String IDGioco, int giocatori){
-        Carta carta = this.gestore.getCarta(IDCarta);
-        Gioco gioco = GiochiDisponibili.get(IDGioco);
-        this.gestore.getCarta(IDCarta).addGettoni(-gioco.getCosto());
-        String data = LocalDate.now().toString();
-        this.currPartita = new Partita(carta, gioco, giocatori, data);
-        String partita = currPartita.getCodice();
-        System.out.println("Avvio partita: " + partita);
-        addPartita(partita, currPartita);  
-    }
-
-    private void addPartita(String p, Partita pt){
-        this.partiteAttuali.put(p, pt); 
-    }
-
-    public void finePartita(int punteggio){
-        this.currPartita.setPunteggio(punteggio);
-        String IDcarta = this.currPartita.getCarta().getCodice();
-        String IDgioco = this.currPartita.getGioco().getCodice();
-        this.gestore.getCarta(IDcarta).addPunti(IDgioco, punteggio);
-    }
-    public void continua(boolean c){
-        if(c){
-            String IDcarta = this.currPartita.getCarta().getCodice();
-            String IDgioco = this.currPartita.getGioco().getCodice();
-            this.partiteAttuali.remove(currPartita.getCodice());
-            this.currPartita = null;
-            this.richiestaPartita(IDcarta, IDgioco);
-        } else {
-            this.partiteAttuali.remove(currPartita.getCodice());
-            this.currPartita = null;
-        }
-    }
-
-    public void recuperaPartita(String gioco){
-        for (Entry<String, Gioco> entry : GiochiDisponibili.entrySet()) {
-            if(gioco == entry.getValue().getNome()){
-                String IDgioco = entry.getValue().getCodice();
-                for(Entry<String, Partita> entity : partiteAttuali.entrySet()){
-                    if(entity.getValue().getGioco().getCodice() == IDgioco){
-                        String partita = entity.getValue().getCodice();
-                        System.out.println("Trovata partita per il gioco " + gioco + ": " + partita );
-                    }
-                }
-            }
-        } 
-    }
-
-    public Partita monitoraPartita(String IDpartita){
-        Partita vista = partiteAttuali.get(IDpartita);
-        System.out.println(vista);
-        return vista;
-    }
-
-    public void statoGioco(String IDgioco){
-        boolean onoff = GiochiDisponibili.get(IDgioco).getStato();
-        if(onoff){
-            for(Entry<String, Partita> entity : partiteAttuali.entrySet()){
-                if(entity.getValue().getGioco().getCodice() == IDgioco){
-                    String partita = entity.getValue().getCodice();
-                    System.out.println("Il gioco è attivo e con partita in corso: " + partita);
-                } else {
-                    System.out.println("Il gioco è attivo e disponibile");
-                }
-            }
-        } else {
-            System.out.println("Il gioco da lei selezionato non è attivo");
-        }
-    }
-
+    //premio
     public void inserisciTessera(String IDcarta){
         Carta tessera = this.gestore.getCarta(IDcarta);
         int totalP = 0;
