@@ -76,7 +76,7 @@ public class Carta {
 
 	@Override
 	public String toString() {
-		return "Carta {" + IDcarta + ": Gettoni :" + numGettoni + "}" + "\n";
+		return "Carta {" + IDcarta + ": Gettoni :" + numGettoni + "}";
 	}
 
 }

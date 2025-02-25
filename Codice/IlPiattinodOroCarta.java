@@ -23,7 +23,6 @@ public class IlPiattinodOroCarta {
     //Gestione Carta
     public void CreaNuovaCarta() {
         int deposito = this.Colonna.get("01").getnumCarte();
-        System.out.println(deposito);
         if(deposito != 0) this.currCarta = new Carta();
         else System.err.println("CARTE ESAURITE, IMPOSSIBILE PROSEGUIRE");
     }
@@ -33,7 +32,7 @@ public class IlPiattinodOroCarta {
         for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
             String prec = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
             if(prec == CF) registrato = true;
-        } if(registrato == false) {
+        } if(!registrato) {
             this.currCarta.creaCliente(CF, nome, cognome);
             System.out.println("Cliente registrato"); 
         } else { System.err.println("Cliente già registrato"); this.currCarta = null; }
@@ -45,14 +44,12 @@ public class IlPiattinodOroCarta {
         return prezzo;
     }
 
-    public void Pagamento() { 
-        if (currCarta != null) {
-            this.CarteFedeltà.put(currCarta.getCodice(), currCarta);
-            int bianco = this.Colonna.get("01").remove();
-            System.out.println("Carta stampata, rimanenti " + bianco);
-            System.err.println("Pagare: " + costoCarta() + "€");
-            if(bianco == 0) System.err.println("CARTE ESAURITE, RICARICARICARE");
-        } 
+    public void Pagamento( boolean newCarta) { 
+        this.CarteFedeltà.put(currCarta.getCodice(), currCarta);
+        int bianco = this.Colonna.get("01").remove();
+        if (bianco == 0) { System.err.println("CARTE ESAURITE, RICARICARE"); }
+        else { System.out.println("Carta stampata, rimanenti " + bianco); }
+        if (newCarta) System.err.println("Pagare: " + costoCarta() + "€");
     }
 
     public double costoCarta(){
@@ -72,11 +69,10 @@ public class IlPiattinodOroCarta {
         else { System.out.println("Carta trovata " + code ); return code; }
     }
 
-    public void selezionaModalita(boolean mod) {
-        if(mod == true){ this.currCarta.changeCodice(); }
-        //*(Da rivedere)*\\
+    public void cambioCodice(boolean mod) {
         this.CarteFedeltà.remove(currCarta.IDcarta);
-        this.Pagamento();
+        if(mod == true){ this.currCarta.changeCodice(); }
+        this.Pagamento(false);
     }
 
     public void inserisciCarta(String IDcarta){
@@ -106,7 +102,7 @@ public class IlPiattinodOroCarta {
     public List<Carta> getElencoCarte() {
         List<Carta> listCarte = new ArrayList<>();
         listCarte.addAll(CarteFedeltà.values());
-        System.out.println(CarteFedeltà);
+        System.out.println(listCarte);
         return listCarte;
     }
 
