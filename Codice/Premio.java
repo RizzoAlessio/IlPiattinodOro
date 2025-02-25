@@ -53,6 +53,10 @@ public class Premio implements java.lang.Cloneable{
         this.Descrizione = Descrizione;
     }
 
+    public Premio copia() {
+        return new Premio(this.ID, this.Nome, this.Valore, this.Descrizione);
+    }
+
     public List<Premio> getElencoCopiePremio() {
         List<Premio> listCopiePremio = new ArrayList<>();
         listCopiePremio.addAll(mappaCopiePremio.values());
@@ -62,7 +66,7 @@ public class Premio implements java.lang.Cloneable{
 
     public void newCopia(){
         String ID = this.ID + "" +  mappaCopiePremio.size();
-        this.mappaCopiePremio.put(ID, this);
+        this.mappaCopiePremio.put(ID, copia());
     }
 
     public void removeCopia(String IDcopia){

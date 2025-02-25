@@ -49,6 +49,10 @@ public class Cibo implements java.lang.Cloneable{
 		this.costo = costo;
 	}
 
+	public Cibo copiaCibo() {
+        return new Cibo(this.IDcibo, this.nome, this.descrizione);
+    }
+
 	public List<Cibo> getDispensa() {
         List<Cibo> list = new ArrayList<>();
         list.addAll(mappaDispensa.values());
