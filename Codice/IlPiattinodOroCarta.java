@@ -13,6 +13,7 @@ public class IlPiattinodOroCarta {
     private Map<String, Gioco> GiochiDisponibili; //per il futuro
     private Carta currCarta;
     private Map<String, Carta> CarteFedeltà;
+    public String Messaggio;
 
     public IlPiattinodOroCarta(Map<String, Gioco> GiochiDisponibili, Map<String, Colonnina> Colonna) {
         this.GiochiDisponibili= GiochiDisponibili;
@@ -22,34 +23,44 @@ public class IlPiattinodOroCarta {
   
     //Gestione Carta
     public void CreaNuovaCarta() {
+        getCartaCorrente();
         int deposito = this.Colonna.get("01").getnumCarte();
-        if(deposito != 0) this.currCarta = new Carta();
-        else System.err.println("CARTE ESAURITE, IMPOSSIBILE PROSEGUIRE");
+        if(deposito != 0) { 
+            Messaggio = "\nCarte Attuali: " + deposito;
+            this.currCarta = new Carta();
+        } else{ 
+            Messaggio = "\nCARTE ESAURITE, IMPOSSIBILE PROSEGUIRE";
+        }
+        System.err.println(Messaggio);
     }
     
     public void InserisciDocumento(String CF, String nome, String cognome) {
         boolean registrato = false;
         for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
-            String prec = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
+            String prec = entry.getValue().getCliente();
             if(prec == CF) registrato = true;
         } if(!registrato) {
             this.currCarta.creaCliente(CF, nome, cognome);
-            System.out.println("Cliente registrato"); 
-        } else { System.err.println("Cliente già registrato"); this.currCarta = null; }
+            Messaggio = "\nCliente registrato"; 
+        } else {  Messaggio = "\nCliente già registrato"; this.currCarta = null; }
+        System.err.println(Messaggio);
     }
 
     public int scegliTipologia(boolean VIP){
         int prezzo = this.currCarta.scegliTipologia(VIP);
-        System.out.println("Il prezzo è di: " + prezzo + "€");
+        Messaggio =  "\nIl prezzo è di: " + prezzo + "€";
+        System.err.println(Messaggio);
         return prezzo;
     }
 
     public void Pagamento( boolean newCarta) { 
         this.CarteFedeltà.put(currCarta.getCodice(), currCarta);
         int bianco = this.Colonna.get("01").remove();
-        if (bianco == 0) { System.err.println("CARTE ESAURITE, RICARICARE"); }
-        else { System.out.println("Carta stampata, rimanenti " + bianco); }
-        if (newCarta) System.err.println("Pagare: " + costoCarta() + "€");
+        if (bianco == 0) { Messaggio = "\nCARTE ESAURITE, RICARICARE"; }
+        else { Messaggio = "\nCarta stampata, rimanenti " + bianco; }
+        if (newCarta) Messaggio += "\nPagare: " + costoCarta() + "€";
+        this.currCarta = null;
+        System.err.println(Messaggio);
     }
 
     public double costoCarta(){
@@ -85,7 +96,8 @@ public class IlPiattinodOroCarta {
         if(currCarta != null){
             this.currCarta.addGettoni(gettoni);
         }
-        System.err.println("Gettoni ricaricati, pagare: " + (gettoni * 0.5) + "€");
+        Messaggio = "Gettoni ricaricati, pagare: " + (gettoni * 0.5) + "€";
+        System.err.println(Messaggio);
     }
 
     public void inserimentoCell(String tel){

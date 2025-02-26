@@ -1,8 +1,6 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.time.LocalDate;
@@ -41,9 +39,12 @@ public class IlPiattinodOroPartita {
     private void addPartita(String p, Partita pt){
         this.partiteAttuali.put(p, pt); 
     }
+    private void addPuntiPartita(int punt, Partita pt){
+        this.currPartita.setPunteggio(punt);
+    }
 
     public void finePartita(int punteggio){
-        this.currPartita.setPunteggio(punteggio);
+        addPuntiPartita(punteggio, currPartita);
         String IDcarta = this.currPartita.getCarta().getCodice();
         String IDgioco = this.currPartita.getGioco().getCodice();
         this.gestoreCarta.getCarta(IDcarta).addPunti(IDgioco, punteggio);

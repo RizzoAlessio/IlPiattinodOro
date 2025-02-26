@@ -84,7 +84,8 @@ public class IlPiattinodOro {
         if (currGioco != null) {
             this.GiochiDisponibili.put(currGioco.getCodice(), currGioco);
             System.out.println("Inserimento Concluso");
-            }
+            this.currGioco = null;
+        }  
     }
     public List<Gioco> getElencoGiochi() {
         List<Gioco> listGiochi = new ArrayList<>();
@@ -107,16 +108,21 @@ public class IlPiattinodOro {
 
     //Premio
     public void InserisciPremio(String ID, String Nome, int Valore, String Descrizione, int NCopie) {
-        this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
-        do{
-            this.currPremio.newCopia();
-            NCopie--;
-        } while(NCopie > 0);
+        for(Entry<String, Premio> entry : mappaPremi.entrySet()){
+            if(!entry.getValue().getID().equals(ID)) {
+               this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
+            } else {this.currPremio = entry.getValue();}
+            do{
+                this.currPremio.newCopia();
+                NCopie--;
+            } while(NCopie > 0);
+        }
     }
     public void FineInserimentoPremio() {
         if (currPremio != null) {
             this.mappaPremi.put(currPremio.getID(), currPremio);
             System.out.println("Inserimento Concluso");
+            this.currPremio = null;
         }
     }
     public List<Premio> getElencoPremi() {
@@ -192,6 +198,7 @@ public class IlPiattinodOro {
         if (currCibo != null) {
             this.mappaCibi.put(currCibo.getCodice(), currCibo);
             System.out.println("Inserimento Concluso");
+            this.currCibo = null;
         }
     }
     public List<Cibo> getElencoCibi() {
@@ -212,12 +219,10 @@ public class IlPiattinodOro {
 
     public List<Tuple<String, String>> disponibilita(String DataPrenotazione, int OraPrenotazione){
         System.out.println("Giochi disponibili:");
-    
         List<Tuple<String, String>> giochiDisp = new ArrayList<>();
         for (Entry<String, Gioco> entry : GiochiDisponibili.entrySet()){
             giochiDisp.add(new Tuple<>(entry.getValue().getNome(), entry.getValue().getCodice()));
         }
-        
         for (Entry<String, Prenotazione> entry : mappaPrenotazioni.entrySet()){
             String data = entry.getValue().getData();
             int ora = entry.getValue().getOra();
@@ -237,6 +242,7 @@ public class IlPiattinodOro {
         if (currPrenotazione != null) {
             this.mappaPrenotazioni.put(currPrenotazione.getCodice(), currPrenotazione);
             System.out.println("Inserimento Concluso");
+            this.currPremio = null;
         }
     }
     public List<Prenotazione> getElencoPrenotazioni() {

@@ -59,13 +59,15 @@ public class Carta {
         this.ClienteAssociato.put(IDccl, cl);
     }
     public String getCliente(){
-        return this.ClienteAssociato.get(this.IDcarta).getNome();
+        return this.ClienteAssociato.get(this.IDcarta).getCF();
     }
     public void inserisciCell(String cell){
         this.ClienteAssociato.get(this.IDcarta).setCell(cell);
     }
 
-    public void addPunti(String gioco, int punti){  this.Punteggio.merge(gioco, punti, Integer::sum);   }
+    public void addPunti(String gioco, int punti){  
+        this.Punteggio.merge(gioco, punti, Integer::sum);   
+    }
     public void removePunti(int punti){
         for(Entry<String, Integer> entry : this.Punteggio.entrySet()){
             if(entry.getValue() >= punti){ addPunti(entry.getKey(), -punti); punti = 0; break;}
@@ -76,7 +78,7 @@ public class Carta {
 
 	@Override
 	public String toString() {
-		return "Carta {" + IDcarta + ": Gettoni :" + numGettoni + "}";
+		return "Carta " + IDcarta + " di "+ getCliente() + ": Gettoni :" + numGettoni + "}\n";
 	}
 
 }

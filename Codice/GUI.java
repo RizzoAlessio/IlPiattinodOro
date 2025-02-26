@@ -74,6 +74,12 @@ public class GUI{
         return imageLabel;
     }
 
+    private static void cancellaTesto(){
+        textPlace.setVisible(!textPlace.isVisible());
+        textPlace.selectAll();
+        textPlace.replaceSelection("");
+    }
+
     public static void main(String[] args) {
             
         sistema = IlPiattinodOro.getInstance();
@@ -112,10 +118,13 @@ public class GUI{
                 addGame.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
                         String IDgioco = '0' + Integer.toString(sistema.GiochiDisponibili.size() + 1);
                         sistema.InserisciGioco(IDgioco, ng11.getText(), ng22.getText(), Integer.parseInt(ng33.getText()));
                         sistema.DefinisciCosto(Integer.parseInt(ng44.getText()));
                         sistema.FineInserimentoGioco();
+                        textPlace.append("Inserito il gioco " + ng11.getText());
+                        ng11.setText(""); ng22.setText(""); ng33.setText(""); ng44.setText("");
                     }
                 });
             textListaG.setVisible(false);
@@ -171,6 +180,7 @@ public class GUI{
 //Area Visualizzare Scritte
         textPlace = new JTextArea();
         textPlace.setLineWrap(true);
+        textPlace.setFont(textPlace.getFont().deriveFont(16f));
         textPlace.setVisible(false);
         content.add(textPlace);
 
@@ -180,7 +190,7 @@ public class GUI{
             JLabel n1 = new JLabel("CF"); JTextField n11 = new JTextField(10);
             JLabel n2 = new JLabel("Nome"); JTextField n22 = new JTextField(10);
             JLabel n3 = new JLabel("Cognome"); JTextField n33 = new JTextField(10);
-            JCheckBox n4 = new JCheckBox("VIP");
+            JCheckBox n4 = new JCheckBox("VIP"); n4.setSelected(false);
             JButton add = new JButton("Aggiungi"); JButton n5 = new JButton("Lista Carte Registrate");
             textCartaArea.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
             textCartaArea.add(n1); textCartaArea.add(n11); textCartaArea.add(n2); textCartaArea.add(n22);
@@ -189,19 +199,22 @@ public class GUI{
                 add.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
                         sistema.CreaNuovaCarta();
+                        textPlace.append(sistema.gestore.Messaggio);
                         sistema.InserisciDocumento(n11.getText(), n22.getText(), n33.getText());
-                        if(n4.isSelected()) {sistema.scegliTipologia(true);} 
+                        if(n4.isSelected()) {sistema.scegliTipologia(true); }
                         else {sistema.scegliTipologia(false);}
+                        textPlace.append(sistema.gestore.Messaggio);
                         sistema.Pagamento();
+                        textPlace.append(sistema.gestore.Messaggio);
+                        n11.setText(""); n22.setText(""); n33.setText("");n4.setSelected(false);
                     }
                 });
                 n5.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        textPlace.setVisible(!textPlace.isVisible());
-                        textPlace.selectAll();
-                        textPlace.replaceSelection("");
+                        cancellaTesto();
                         textPlace.append(sistema.getElencoCarte().toString());
                     }
                 });
@@ -215,9 +228,7 @@ public class GUI{
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textPlace.setVisible(!textPlace.isVisible());
-                textPlace.selectAll();
-                textPlace.replaceSelection("");
+                cancellaTesto();
                 textPlace.append(sistema.getElencoGiochi().toString());
             }
         });
@@ -239,9 +250,7 @@ public class GUI{
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textPlace.setVisible(!textPlace.isVisible());
-                textPlace.selectAll();
-                textPlace.replaceSelection("");
+                cancellaTesto();
                 textPlace.append(sistema.getElencoPremi().toString());
             }
         });
@@ -264,9 +273,7 @@ public class GUI{
         button5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textPlace.setVisible(!textPlace.isVisible());
-                textPlace.selectAll();
-                textPlace.replaceSelection("");
+                cancellaTesto();
                 textPlace.append(sistema.getElencoCibi().toString());
             }
         });
