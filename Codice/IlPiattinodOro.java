@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.time.LocalDate;
 
@@ -36,7 +37,6 @@ public class IlPiattinodOro {
         this.mappaPrenotazioni = new HashMap<>();
         this.partiteAttuali = new HashMap<>();
         loadInizio();
-        loadColonna();
         this.gestore = new IlPiattinodOroCarta(GiochiDisponibili, Colonna);
         this.arbitro = new IlPiattinodOroPartita(GiochiDisponibili, gestore);
     }
@@ -50,21 +50,21 @@ public class IlPiattinodOro {
         return sistema;
     }
 
-    public void loadColonna() {
+    public void loadInizio() {
+
         Colonnina cln = new Colonnina("01", 100);
         this.Colonna.put("01", cln);
-        System.out.println("Colonna Pronta");
-    }
-    public void loadInizio() {
+
         Gioco g1 = new Gioco("01", "Biliardo", "Tavolo", 4, 10);
         Gioco g2 = new Gioco("02", "Flipper", "Cabinati", 1, 5);
         Gioco g3 = new Gioco("03", "SpaceBattle", "Cabinati", 2, 10); g3.setStato(false);
         this.GiochiDisponibili.put("01", g1);
         this.GiochiDisponibili.put("02", g2);
         this.GiochiDisponibili.put("03", g3);
-        InserisciPremio("001", "Trombone", 999, "Trombone", 1);
-        FineInserimentoPremio();
-        System.out.println("Caricamento Premi Completato");
+        Premio p1 = new Premio("001", "Trombone", 90, "è un trombone");
+        p1.newCopia();
+        this.mappaPremi.put("001", p1);
+        System.out.println(getElencoPremi());
     }
 
     //Gioco
@@ -93,6 +93,7 @@ public class IlPiattinodOro {
         System.out.println(GiochiDisponibili);
         return listGiochi;
     }
+
     public Gioco getGiocoCorrente() {
         System.out.println(currGioco);
         return currGioco;
@@ -100,10 +101,38 @@ public class IlPiattinodOro {
     public void getGioco(String IDgioco) {
         System.out.println(GiochiDisponibili.get(IDgioco));
     }
+    public void getGiocoPunti(String IDgioco) {
+        System.out.println(GiochiDisponibili.get(IDgioco).getPunteggioOrdinato());
+    }
     public void statoGioco(String IDgioco){
         boolean onoff = new GiocoOn(sistema).recover(IDgioco); 
         if(onoff) new GiocoOn(sistema).taken();
         else new GiocoOff(sistema).taken();
+    }
+
+    public void puntiGiocoTot(String IDcarta){
+        List<String> Gioco = new ArrayList<>();
+        for(Entry<String, Gioco> entry : GiochiDisponibili.entrySet()){
+            
+            for(Entry<String, Integer> entry2 : entry.getValue().Punteggio.entrySet()){
+                if(Objects.equals(IDcarta, entry2.getKey())){
+                    int pos = getPiazzamento(entry.getValue().getPunteggioOrdinato(), IDcarta);
+                    Gioco.add(entry.getValue().getNome() + " punteggio: " + entry2.getValue() + " " + pos +"°");
+                }
+            }
+        } 
+        System.out.println(Gioco);
+    }
+
+    public int getPiazzamento(Map<String, Integer> Punti, String IDcarta) {
+    int pos = 1;
+    for(String ID : Punti.keySet()) {
+        if(Objects.equals(ID, IDcarta)) {
+            return pos;
+        }
+        pos++;
+    }
+    return -1;
     }
 
     //Premio
@@ -111,6 +140,7 @@ public class IlPiattinodOro {
         for(Entry<String, Premio> entry : mappaPremi.entrySet()){
             if(!entry.getValue().getID().equals(ID)) {
                this.currPremio = new Premio(ID, Nome, Valore, Descrizione);
+               System.out.println(this.currPremio);
             } else {this.currPremio = entry.getValue();}
             do{
                 this.currPremio.newCopia();
@@ -178,7 +208,7 @@ public class IlPiattinodOro {
     public List<Carta> getElencoCarte() { return this.gestore.getElencoCarte(); }
 
     //Cibo
-    
+
     public void InserisciCibo(String IDCibo, String nome, String descrizione, int CCopie) {
         this.currCibo = new Cibo(IDCibo, nome, descrizione);
         do{

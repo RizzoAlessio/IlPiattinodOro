@@ -1,7 +1,10 @@
 package main;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -74,7 +77,15 @@ public class Carta {
             else{ punti -= entry.getValue(); addPunti(entry.getKey(), -entry.getValue());}
         }  
     }
-    public int getPunti(String gioco){  return this.Punteggio.get(gioco);   }
+	public Map<String, Integer> getPunteggioOrdinato() {
+        List<Map.Entry<String, Integer>> PuntiTot = new ArrayList<>(this.Punteggio.entrySet());
+        PuntiTot.sort(Map.Entry.comparingByValue());
+        Map<String, Integer> PuntiOrd = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : PuntiTot) {
+           	PuntiOrd.put(entry.getKey(), entry.getValue());
+        }
+		return PuntiOrd;
+	}
 
 	@Override
 	public String toString() {

@@ -1,5 +1,13 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Gioco {
 
 	private String IDgioco;
@@ -8,6 +16,7 @@ public class Gioco {
 	private int giocatori;
 	private int costo;
 	private boolean attivo;
+	Map<String, Integer> Punteggio;
 
 	public Gioco(String IDgioco, String nome, String tipologia, int giocatori, int costo) {
 		this.IDgioco = IDgioco;
@@ -16,6 +25,7 @@ public class Gioco {
         this.giocatori = giocatori;
         this.costo = costo;
 		this.attivo = true;
+		this.Punteggio = new HashMap<>();
 	}
 
 	public String getCodice() {
@@ -58,6 +68,19 @@ public class Gioco {
 	}
 	public void setStato(boolean state) {
 		this.attivo = state;
+	}
+
+	public void setPunteggio(String IDcarta, int punti) {
+		this.Punteggio.merge(IDcarta, punti, Integer::sum); 
+	}
+	public Map<String, Integer> getPunteggioOrdinato() {
+        List<Map.Entry<String, Integer>> PuntiTot = new ArrayList<>(this.Punteggio.entrySet());
+        PuntiTot.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
+        Map<String, Integer> PuntiOrd = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : PuntiTot) {
+           	PuntiOrd.put(entry.getKey(), entry.getValue());
+        }
+		return PuntiOrd;
 	}
 
 	@Override

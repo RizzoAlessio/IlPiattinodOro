@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class IlPiattinodOroPartita {
 
     private IlPiattinodOroCarta gestoreCarta;
+    private IlPiattinodOro gestore;
     private Map<String, Gioco> GiochiDisponibili;
     private Partita currPartita;
     private Map<String, Partita> partiteAttuali;
@@ -48,7 +49,9 @@ public class IlPiattinodOroPartita {
         String IDcarta = this.currPartita.getCarta().getCodice();
         String IDgioco = this.currPartita.getGioco().getCodice();
         this.gestoreCarta.getCarta(IDcarta).addPunti(IDgioco, punteggio);
+        this.GiochiDisponibili.get(IDgioco).setPunteggio(IDcarta, punteggio);
     }
+    
     public void continua(boolean c){
         if(c){
             String IDcarta = this.currPartita.getCarta().getCodice();

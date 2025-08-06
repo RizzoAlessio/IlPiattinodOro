@@ -64,7 +64,7 @@ public class GUI{
     }
 
     private static JLabel Logo(){
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\utente\\Desktop\\Tesi\\tese\\Piatto\\IlPiattinodOro\\src\\main\\logo.png");
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\utente\\Desktop\\Cartella Codici\\Codici\\Piatto\\IlPiattinodOro\\src\\main\\logo.png");
             java.awt.Image i = imageIcon.getImage();
             java.awt.Image i2 = i.getScaledInstance(500, 280,  java.awt.Image.SCALE_SMOOTH);
             ImageIcon imageIcon2 = new ImageIcon(i2);
