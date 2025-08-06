@@ -97,7 +97,7 @@ public class TestGioco {
         this.testPagamentoCarta();
         sistema.getElencoCarte();
         sistema.recuperoCarta("ABC2025");
-        sistema.selezionaModalita(false);
+        sistema.cambioCodice(false);
         sistema.getElencoCarte();
 
     }
@@ -106,13 +106,12 @@ public class TestGioco {
         this.testPagamentoCarta();
         sistema.getElencoCarte();
         sistema.recuperoCarta("ABC2025");
-        sistema.selezionaModalita(true);
+        sistema.cambioCodice(true);
         sistema.getElencoCarte();
     }
     @Test
     public void testCaricaGettoni() {
         this.testPagamentoCarta();
-        System.out.println("ciao");
         sistema.inserisciCarta(sistema.getElencoCarte().get(0).getCodice());
         sistema.ricaricaGettoni(100);
         sistema.getElencoCarte();
@@ -135,10 +134,12 @@ public class TestGioco {
         String ID = sistema.getCartaCorrente().getCodice();
         sistema.Pagamento();
         sistema.getElencoCarte();
-        sistema.disponibilita("2 Aprile", 10);
+        sistema.disponibilita("3 Aprile", 18);
         sistema.creaPrenotazione(ID, "01", 3, "3 Aprile", 18);
         sistema.finePrenotazione();
         sistema.getElencoPrenotazioni();
+        sistema.disponibilita("3 Aprile", 18);
+        sistema.disponibilita("3 Aprile", 19);
     }
     @Test
     public void testPartita() {
@@ -159,6 +160,36 @@ public class TestGioco {
         sistema.inserisciTessera(ID);
         sistema.cercaPremio(1000);
         sistema.scegliPremio("001", ID);
+    }
+
+    @Test
+    public void testPartitaClassifica() {
+        sistema.CreaNuovaCarta();
+        sistema.InserisciDocumento("ABC2025", "Marco", "Pesalonbi");
+        sistema.scegliTipologia(true);
+        sistema.ricaricaGettoni(100);
+        String ID = sistema.getCartaCorrente().getCodice();
+        sistema.Pagamento();
+        sistema.richiestaPartita(ID, "01");
+        sistema.avviaPartita(ID, "01", 1);
+        sistema.finePartita(100);
+        sistema.continua(false);
+        sistema.inserisciTessera(ID);
+        sistema.puntiGiocoTot(ID);
+
+        sistema.CreaNuovaCarta();
+        sistema.InserisciDocumento("ABC2026", "Luigi", "Pesalonbi");
+        sistema.scegliTipologia(true);
+        sistema.ricaricaGettoni(100);
+        String ID2 = sistema.getCartaCorrente().getCodice();
+        sistema.Pagamento();
+        sistema.richiestaPartita(ID2, "01");
+        sistema.avviaPartita(ID2, "01", 1);
+        sistema.finePartita(99);
+        sistema.continua(false);
+        sistema.inserisciTessera(ID2);
+        sistema.puntiGiocoTot(ID2);
+        sistema.puntiGiocoTot(ID);
     }
 
 }
