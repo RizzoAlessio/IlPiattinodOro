@@ -25,17 +25,22 @@ public class IlPiattinodOro {
     private Prenotazione currPrenotazione;
     private Map<String, Prenotazione> mappaPrenotazioni;
     public Map<String, Partita> partiteAttuali;
+    public Map<Integer, Dipendente> mappaDipendenti;
+    public Map<String, Turno> Turni;
+    private Dipendente currDipendente;
     
 
 
     private IlPiattinodOro() {
-        this.GiochiDisponibili= new HashMap<>();
+        this.GiochiDisponibili = new HashMap<>();
         this.mappaPremi= new HashMap<>();
         this.CarteFedeltà = new HashMap<>();
         this.Colonna = new HashMap<>();
         this.mappaCibi = new HashMap<>();
         this.mappaPrenotazioni = new HashMap<>();
         this.partiteAttuali = new HashMap<>();
+        this.Turni = new HashMap<>();
+        this.mappaDipendenti = new HashMap<>();
         loadInizio();
         this.gestore = new IlPiattinodOroCarta(GiochiDisponibili, Colonna);
         this.arbitro = new IlPiattinodOroPartita(GiochiDisponibili, gestore);
@@ -64,7 +69,15 @@ public class IlPiattinodOro {
         Premio p1 = new Premio("001", "Trombone", 90, "è un trombone");
         p1.newCopia();
         this.mappaPremi.put("001", p1);
-        System.out.println(getElencoPremi());
+
+        Dipendente d1 = new Dipendente("ABC", "Mario", "Rossi", "AAA");
+        Admin adm = new Admin("DFG", "Luigi", "Rossi", "AAA");
+        adm.setAmmin();
+        this.mappaDipendenti.put(01, d1);
+        this.mappaDipendenti.put(00, adm);
+        Turno t1 = new Turno(d1.getID(), 8, 13, "Martedì");
+        this.Turni.put(d1.getID(), t1);
+        //System.out.println(getElencoPremi());
     }
 
     //Gioco
@@ -93,7 +106,6 @@ public class IlPiattinodOro {
         System.out.println(GiochiDisponibili);
         return listGiochi;
     }
-
     public Gioco getGiocoCorrente() {
         System.out.println(currGioco);
         return currGioco;
@@ -109,11 +121,9 @@ public class IlPiattinodOro {
         if(onoff) new GiocoOn(sistema).taken();
         else new GiocoOff(sistema).taken();
     }
-
     public void puntiGiocoTot(String IDcarta){
         List<String> Gioco = new ArrayList<>();
         for(Entry<String, Gioco> entry : GiochiDisponibili.entrySet()){
-            
             for(Entry<String, Integer> entry2 : entry.getValue().Punteggio.entrySet()){
                 if(Objects.equals(IDcarta, entry2.getKey())){
                     int pos = getPiazzamento(entry.getValue().getPunteggioOrdinato(), IDcarta);
@@ -121,9 +131,10 @@ public class IlPiattinodOro {
                 }
             }
         } 
+        System.out.println("Gioco");
         System.out.println(Gioco);
-    }
 
+    }
     public int getPiazzamento(Map<String, Integer> Punti, String IDcarta) {
     int pos = 1;
     for(String ID : Punti.keySet()) {
@@ -208,7 +219,6 @@ public class IlPiattinodOro {
     public List<Carta> getElencoCarte() { return this.gestore.getElencoCarte(); }
 
     //Cibo
-
     public void InserisciCibo(String IDCibo, String nome, String descrizione, int CCopie) {
         this.currCibo = new Cibo(IDCibo, nome, descrizione);
         do{
@@ -246,7 +256,6 @@ public class IlPiattinodOro {
     }
 
     //Prenotazione
-
     public List<Tuple<String, String>> disponibilita(String DataPrenotazione, int OraPrenotazione){
         System.out.println("Giochi disponibili:");
         List<Tuple<String, String>> giochiDisp = new ArrayList<>();
@@ -283,11 +292,65 @@ public class IlPiattinodOro {
     }
 
     //Gestore Partita
-    public void richiestaPartita(String IDCarta, String IDGioco){ this.arbitro.richiestaPartita(IDCarta, IDGioco);}
+    public String richiestaPartita(String IDCarta, String IDGioco){ return this.arbitro.richiestaPartita(IDCarta, IDGioco);}
     public void avviaPartita(String IDCarta, String IDGioco, int giocatori){this.arbitro.avviaPartita(IDCarta, IDGioco, giocatori);}
     public void finePartita(int punteggio){ this.arbitro.finePartita(punteggio);}
     public void continua(boolean c){ this.arbitro.continua(c);}
     public void recuperaPartita(String gioco){ this.arbitro.recuperaPartita(gioco);}
     public Partita monitoraPartita(String IDpartita){ return this.arbitro.monitoraPartita(IDpartita);}
-    
+
+    //Dipendenti
+    public boolean[] VerificaCredenziali(String CF, String Codice){   
+        for(Entry<Integer, Dipendente> entry : mappaDipendenti.entrySet()){
+            if((entry.getValue().getCF().equals(CF)) && (entry.getValue().getPass().equals(Codice))) {
+               System.out.println("Utente verificato " + entry.getValue().getID());
+               if(entry.getValue().getID().equals("ADMIN")) return new boolean[] {true, true};
+               return new boolean[] { true, false};
+            } 
+        } return new boolean[] {false, false};
+    }
+    public void Check_in(String IDdipendente, int Orario, String Giorno){  
+        for(Entry<String, Turno> entry : Turni.entrySet()){
+            if(entry.getKey().equals(IDdipendente) && entry.getValue().getGiorno().equals(Giorno)){
+                if (Orario >= entry.getValue().getInizo() && Orario <= entry.getValue().getFine()){
+                    entry.getValue().setDisponibile();
+                    for(Entry<Integer, Dipendente> entry1 : mappaDipendenti.entrySet()){
+                        if((entry1.getValue().getID().equals(IDdipendente))) {
+                            System.out.println("Il dipendente " + entry1.getValue().getCredenziali() + " è a lavoro");
+                            currDipendente = entry1.getValue();
+                        } 
+                }
+            }
+        }
+        }
+    }
+    public void Check_Out(){   
+        for(Entry<String, Turno> entry : Turni.entrySet()){
+            if(entry.getKey().equals(currDipendente.getID())){
+                    entry.getValue().setDisponibile();
+                    currDipendente = null;
+            }
+        }
+    } 
+    public void MonitoraDipendenti(String Giorno){
+        if(currDipendente != null){
+            System.out.println("Il dipendente " + currDipendente.getCredenziali() + "è a lavoro");
+        } else {
+            System.out.println("Nessun dipendente è a lavoro");
+        }
+        System.out.println("I dipendenti in turno oggi sono: ");
+        for(Entry<String, Turno> entry : Turni.entrySet()){
+            if(entry.getValue().getGiorno().equals(Giorno) && entry.getValue().getDisponibile()){
+                for(Entry<Integer, Dipendente> entry1 : mappaDipendenti.entrySet()){
+                    if((entry1.getValue().getID().equals(entry.getValue().getDip()))) {
+                        System.out.println("Il dipendente " + entry1.getValue().getCredenziali() + " dalle " + entry.getValue().getInizo() + " alle " + entry.getValue().getFine());
+                    } 
+                }
+            }
+        }
+    }
+
+    /*
+
+    */
 }

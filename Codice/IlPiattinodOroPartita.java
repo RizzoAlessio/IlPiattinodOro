@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class IlPiattinodOroPartita {
 
     private IlPiattinodOroCarta gestoreCarta;
-    private IlPiattinodOro gestore;
     private Map<String, Gioco> GiochiDisponibili;
     private Partita currPartita;
     private Map<String, Partita> partiteAttuali;
@@ -20,10 +19,11 @@ public class IlPiattinodOroPartita {
         this.partiteAttuali = new HashMap<>();
     }
 
-    public void richiestaPartita(String IDCarta, String IDGioco){
+    public String richiestaPartita(String IDCarta, String IDGioco){
         Carta carta = this.gestoreCarta.getCarta(IDCarta);
         Gioco gioco = GiochiDisponibili.get(IDGioco);
-        if(carta.getGettoni() >= gioco.getCosto()) System.out.println("Gettoni sufficenti");
+        if(carta.getGettoni() >= gioco.getCosto()) return "Gettoni sufficenti";
+        return null;
     }
 
     public void avviaPartita(String IDCarta, String IDGioco, int giocatori){

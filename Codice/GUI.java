@@ -4,12 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.*;
+//import java.util.concurrent.TimeUnit;
+
 import javax.swing.*;
 
 public class GUI{
 
     static IlPiattinodOro sistema;
-    public static JTextArea textField, textCartaArea, textListaG, textListaP, textListaC, textPlace;
+    static Game gioco;
+    public static JTextArea textField, textCartaArea, textListaG, textListaP, textListaC, textPlace, textGiocaG;
     public static JPanel GiocoButtons, PremioButtons, CiboButtons;
 
     private static JMenuBar Menu(){
@@ -130,6 +133,49 @@ public class GUI{
             textListaG.setVisible(false);
         content.add(textListaG);
 
+
+//Area Gioco
+        textGiocaG = new JTextArea();
+        textGiocaG.setLineWrap(true);
+            JLabel cg = new JLabel("Codice Gioco"); JTextField cg1 = new JTextField(10);
+            JLabel cp = new JLabel("Codice Giocatore"); JTextField cp1 = new JTextField(10);
+            JLabel gg = new JLabel("Num Giocatori"); JTextField gg1 = new JTextField(2);
+            JButton findP = new JButton("Richiesta Partita");
+            JButton findPunti = new JButton("Punteggio Partita");
+            textGiocaG.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            textGiocaG.add(cg); textGiocaG.add(cg1); textGiocaG.add(cp); textGiocaG.add(cp1);
+            textGiocaG.add(gg); textGiocaG.add(gg1);
+            textGiocaG.add(findP); textGiocaG.add(findPunti);
+                findPunti.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        sistema.puntiGiocoTot(cp1.getText());
+                    }
+                });
+
+                findP.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        String gett = sistema.richiestaPartita(cp1.getText(), cg1.getText());
+                        
+                        if(gett != null){
+                            
+                            //TimeUnit.SECONDS.sleep(1);
+                            sistema.avviaPartita(cp1.getText(), cg1.getText(), Integer.parseInt(gg1.getText()));
+                            String gio = sistema.GiochiDisponibili.get(cg1.getText()).getNome();
+                            textPlace.append(gett + " ...avvio..." + gio);
+                            gioco = new Game();
+                            gioco.GameG(gio, sistema);
+                            cp1.setText(""); cg1.setText(""); gg1.setText("");
+                            
+                        }
+                    }
+                });
+            textGiocaG.setVisible(false);
+        content.add(textGiocaG);
+
+
 //Area Nuovo Premio
         textListaP = new JTextArea();
         textListaP.setLineWrap(true);
@@ -225,6 +271,7 @@ public class GUI{
         GiocoButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton button1 = new JButton("Elenco giochi");
         JButton button2 = new JButton("Aggiungi gioco");
+        JButton button3 = new JButton("Gioca");
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -240,28 +287,35 @@ public class GUI{
             }
         });
         GiocoButtons.add(button2);  
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textGiocaG.setVisible(!textGiocaG.isVisible());
+            }
+        });
+        GiocoButtons.add(button3); 
         GiocoButtons.setVisible(false);
         content.add(GiocoButtons);
 
 //Pulsanti Area Premio
         PremioButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton button3 = new JButton("Elenco Premi");
-        JButton button4 = new JButton("Aggiungi Premi");
-        button3.addActionListener(new ActionListener() {
+        JButton buttonp3 = new JButton("Elenco Premi");
+        JButton buttonp4 = new JButton("Aggiungi Premi");
+        buttonp3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cancellaTesto();
                 textPlace.append(sistema.getElencoPremi().toString());
             }
         });
-        PremioButtons.add(button3);
-        button4.addActionListener(new ActionListener() {
+        PremioButtons.add(buttonp3);
+        buttonp4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textListaP.setVisible(!textListaP.isVisible());
             }
         });
-        PremioButtons.add(button4);
+        PremioButtons.add(buttonp4);
         PremioButtons.setVisible(false);
         content.add(PremioButtons);
 
