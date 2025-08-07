@@ -192,4 +192,19 @@ public class TestGioco {
         sistema.puntiGiocoTot(ID);
     }
 
+    @Test
+    public void testDipendenti() {
+        boolean[] res = sistema.VerificaCredenziali("ABC", "AAA");
+        if(res[0]) { sistema.Check_in(sistema.mappaDipendenti.get(1).getID(), 9, "Martedì");}
+
+        boolean[] res0 = sistema.VerificaCredenziali("DFG", "AAA");
+        if(res0[1]) { sistema.MonitoraDipendenti("Martedì");}
+
+        sistema.Check_Out();
+
+        boolean[] res1 = sistema.VerificaCredenziali("DFG", "AAA");
+        if(res1[1]) { sistema.MonitoraDipendenti("Martedì");}
+        
+    }
+
 }
