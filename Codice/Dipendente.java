@@ -16,7 +16,7 @@ public class Dipendente {
         this.nome = nome;
         this.cognome = cognome;
 		this.pass = pass;
-		this.IDdipendente = "IPDO-" + nome.charAt(0) + cognome.charAt(0) + (char)(r.nextInt(26) + 'a');
+		this.IDdipendente = "IPDO-" + nome.charAt(0) + cognome.charAt(0) + (char)(r.nextInt(26) + 'A');
 	}
 
 	public String getCF() {

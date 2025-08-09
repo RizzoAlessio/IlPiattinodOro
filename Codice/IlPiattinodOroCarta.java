@@ -72,11 +72,14 @@ public class IlPiattinodOroCarta {
 
     public String recuperoCarta(String CF) {
         String code = null;
-        for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
-            String reg = entry.getValue().ClienteAssociato.get(this.currCarta.IDcarta).getCF();
-            if(reg == CF) { code = entry.getValue().IDcarta; this.inserisciCarta(code);}
+        for (Entry<String, Carta> entry2 : CarteFedeltà.entrySet()) {
+            for (Entry<String, Cliente> entry22 : entry2.getValue().ClienteAssociato.entrySet()) {
+                String reg = entry22.getValue().getCF();
+                System.out.println("CF = " + CF + " | reg = " + reg);
+                if(reg.equals(CF)) { code = entry2.getValue().IDcarta; this.inserisciCarta(code);}
+            }
         }
-        if( code == null){ System.err.println("Nessuna carta trovata"); return null; }
+        if( code == null){ System.out.println("Nessuna carta trovata"); return null; }
         else { System.out.println("Carta trovata " + code ); return code; }
     }
 
@@ -87,9 +90,9 @@ public class IlPiattinodOroCarta {
     }
 
     public void inserisciCarta(String IDcarta){
-        for (Entry<String, Carta> entry : CarteFedeltà.entrySet()) {
-            String ID = entry.getValue().getCodice();
-            if(ID == IDcarta) { this.currCarta = entry.getValue(); }
+        for (Entry<String, Carta> entry3 : CarteFedeltà.entrySet()) {
+            String ID = entry3.getValue().getCodice();
+            if(ID == IDcarta) { this.currCarta = entry3.getValue(); }
         }
     }
     public void ricaricaGettoni(int gettoni){

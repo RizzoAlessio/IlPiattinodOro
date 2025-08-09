@@ -4,7 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.*;
-//import java.util.concurrent.TimeUnit;
+import java.util.Map.Entry;
+
+/*
+ * INSERIRE:
+ *  PRENOTAZIONE (?)
+ *  COMPRA PREMIO (?)
+ */
 
 import javax.swing.*;
 
@@ -13,7 +19,7 @@ public class GUI{
     static IlPiattinodOro sistema;
     static Game gioco;
     public static JTextArea textField, textCartaArea, textListaG, textListaP, textListaC, textPlace, textGiocaG;
-    public static JPanel GiocoButtons, PremioButtons, CiboButtons;
+    public static JPanel GiocoButtons, PremioButtons, CiboButtons, Customer;
 
     private static JMenuBar Menu(){
         JMenuBar menu = new JMenuBar();
@@ -27,6 +33,7 @@ public class GUI{
                     PremioButtons.setVisible(false);
                     CiboButtons.setVisible(false);
                     textCartaArea.setVisible(false);
+                    Customer.setVisible(false);
                 }
             });
             JMenuItem mCibo = new JMenuItem("Area Cibo");
@@ -37,6 +44,7 @@ public class GUI{
                     GiocoButtons.setVisible(false);
                     CiboButtons.setVisible(true);
                     textCartaArea.setVisible(false);
+                    Customer.setVisible(false);
                 }
             });
             JMenuItem mPremio = new JMenuItem("Area Premio");
@@ -47,9 +55,20 @@ public class GUI{
                     GiocoButtons.setVisible(false);
                     CiboButtons.setVisible(false);
                     textCartaArea.setVisible(false);
+                    Customer.setVisible(false);
                 }
             });
         JMenuItem mCheck = new JMenuItem("Area Dipendenti");
+        mCheck.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PremioButtons.setVisible(false);
+                    GiocoButtons.setVisible(false);
+                    CiboButtons.setVisible(false);
+                    textCartaArea.setVisible(false);
+                    Customer.setVisible(true);
+                }
+            });
         JMenuItem mCarta = new JMenuItem("Area Carta");
             mCarta.addActionListener(new ActionListener() {
                 @Override
@@ -58,6 +77,7 @@ public class GUI{
                     GiocoButtons.setVisible(false);
                     CiboButtons.setVisible(false);
                     textCartaArea.setVisible(true);
+                    Customer.setVisible(false);
                 }
             });
         y.add(mGioco);  y.add(mCibo);y.add(mPremio);
@@ -83,30 +103,7 @@ public class GUI{
         textPlace.replaceSelection("");
     }
 
-    public static void main(String[] args) {
-            
-        sistema = IlPiattinodOro.getInstance();
-        JFrame frame = new JFrame("Il Piattino d'Oro");
-        frame.setLayout(new BorderLayout());
-        frame.setBackground(Color.GREEN);
-
-        frame.setJMenuBar(Menu());
-        frame.add(Logo(), BorderLayout.NORTH);
-
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-
-        /*textField = new JTextArea();
-        textField.setLineWrap(true);
-        content.add(textField);
-        utton5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(textField.getText());
-            }
-        });*/
-
-//Area Nuovo Gioco
+    private static JTextArea AreaNuovoGioco(){
         textListaG = new JTextArea();
         textListaG.setLineWrap(true);
             JLabel ng1 = new JLabel("Nome Gioco"); JTextField ng11 = new JTextField(10);
@@ -131,52 +128,60 @@ public class GUI{
                     }
                 });
             textListaG.setVisible(false);
-        content.add(textListaG);
+        return textListaG;
+    }
 
-
-//Area Gioco
+    private static JTextArea AreaGioco(){
         textGiocaG = new JTextArea();
         textGiocaG.setLineWrap(true);
             JLabel cg = new JLabel("Codice Gioco"); JTextField cg1 = new JTextField(10);
             JLabel cp = new JLabel("Codice Giocatore"); JTextField cp1 = new JTextField(10);
             JLabel gg = new JLabel("Num Giocatori"); JTextField gg1 = new JTextField(2);
             JButton findP = new JButton("Richiesta Partita");
+            JButton findCurr = new JButton("Partita Corrente");
             JButton findPunti = new JButton("Punteggio Partita");
             textGiocaG.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
             textGiocaG.add(cg); textGiocaG.add(cg1); textGiocaG.add(cp); textGiocaG.add(cp1);
             textGiocaG.add(gg); textGiocaG.add(gg1);
-            textGiocaG.add(findP); textGiocaG.add(findPunti);
+            textGiocaG.add(findP); textGiocaG.add(findPunti); textGiocaG.add(findCurr);
+            findCurr.setVisible(false);
                 findPunti.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         sistema.puntiGiocoTot(cp1.getText());
                     }
                 });
-
+                findCurr.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        Partita IDpartita = sistema.recuperaPartita();
+                        System.out.println(IDpartita);
+                        textPlace.append("Partita Attuale: \n");
+                        textPlace.append("" + sistema.monitoraPartita(IDpartita.getCodice()) + "* " + gioco.p + "pt ");
+                    }
+                });
                 findP.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         cancellaTesto();
                         String gett = sistema.richiestaPartita(cp1.getText(), cg1.getText());
-                        
                         if(gett != null){
-                            
-                            //TimeUnit.SECONDS.sleep(1);
                             sistema.avviaPartita(cp1.getText(), cg1.getText(), Integer.parseInt(gg1.getText()));
                             String gio = sistema.GiochiDisponibili.get(cg1.getText()).getNome();
                             textPlace.append(gett + " ...avvio..." + gio);
                             gioco = new Game();
                             gioco.GameG(gio, sistema);
                             cp1.setText(""); cg1.setText(""); gg1.setText("");
-                            
+                            findCurr.setVisible(!findCurr.isVisible());
                         }
                     }
                 });
             textGiocaG.setVisible(false);
-        content.add(textGiocaG);
+        return textGiocaG;
+    }
 
-
-//Area Nuovo Premio
+    private static JTextArea AreaNuovoPremio(){
         textListaP = new JTextArea();
         textListaP.setLineWrap(true);
             JLabel np1 = new JLabel("Nome Premio"); JTextField np11 = new JTextField(10);
@@ -197,9 +202,10 @@ public class GUI{
                     }
                 });
             textListaP.setVisible(false);
-        content.add(textListaP);
-
-//Area Nuovo Cibo
+        return textListaP;
+    }
+    
+    private static JTextArea AreaNuovoCibo(){
         textListaC = new JTextArea();
         textListaC.setLineWrap(true);
             JLabel nc1 = new JLabel("Nome Cibo"); JTextField nc11 = new JTextField(10);
@@ -221,27 +227,25 @@ public class GUI{
                     }
                 });
             textListaC.setVisible(false);
-        content.add(textListaC);
+        return textListaC;
+    }
 
-//Area Visualizzare Scritte
-        textPlace = new JTextArea();
-        textPlace.setLineWrap(true);
-        textPlace.setFont(textPlace.getFont().deriveFont(16f));
-        textPlace.setVisible(false);
-        content.add(textPlace);
-
-//Area Carta
+    private static JTextArea AreaCarta(){
         textCartaArea = new JTextArea();
         textCartaArea.setLineWrap(true);
             JLabel n1 = new JLabel("CF"); JTextField n11 = new JTextField(10);
             JLabel n2 = new JLabel("Nome"); JTextField n22 = new JTextField(10);
             JLabel n3 = new JLabel("Cognome"); JTextField n33 = new JTextField(10);
             JCheckBox n4 = new JCheckBox("VIP"); n4.setSelected(false);
-            JButton add = new JButton("Aggiungi"); JButton n5 = new JButton("Lista Carte Registrate");
+            JLabel n5 = new JLabel("Gettoni aggiuntivi"); JTextField n55 = new JTextField(3);
+            JButton add = new JButton("Aggiungi"); JButton list = new JButton("Lista Carte Registrate");
+            JButton recov = new JButton("Recupera Carta"); JButton ric = new JButton("Ricarica Carta");
             textCartaArea.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
             textCartaArea.add(n1); textCartaArea.add(n11); textCartaArea.add(n2); textCartaArea.add(n22);
-            textCartaArea.add(n3); textCartaArea.add(n33); textCartaArea.add(n4);
-            textCartaArea.add(add); textCartaArea.add(n5);
+            textCartaArea.add(n3); textCartaArea.add(n33); textCartaArea.add(n5); textCartaArea.add(n55);
+            textCartaArea.add(n4);
+            textCartaArea.add(add); textCartaArea.add(list);
+            textCartaArea.add(recov); textCartaArea.add(ric);
                 add.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -257,16 +261,164 @@ public class GUI{
                         n11.setText(""); n22.setText(""); n33.setText("");n4.setSelected(false);
                     }
                 });
-                n5.addActionListener(new ActionListener() {
+                list.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         cancellaTesto();
                         textPlace.append(sistema.getElencoCarte().toString());
                     }
                 });
+                recov.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        String rec = sistema.recuperoCarta(n11.getText());
+                        textPlace.append(rec);
+                    }
+                });
+                ric.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                       // sistema.inserisciCarta();
+                        sistema.ricaricaGettoni(Integer.parseInt(n55.getText()));
+                        textPlace.append("Gettoni Caricati");
+                    }
+                });
             textCartaArea.setVisible(false);
-        content.add(textCartaArea);
+        return textCartaArea;
+    }
 
+    private static JPanel AreaDipendenti(){
+        JPanel contet = new JPanel();
+        JTextArea textDip = new JTextArea();
+        textDip.setLineWrap(true);
+            JLabel CK1 = new JLabel("ID"); JTextField CK11 = new JTextField(10);
+            JLabel CK2 = new JLabel("Orario"); JTextField CK22 = new JTextField(10);
+            JLabel CK3 = new JLabel("Giorno"); JTextField CK33 = new JTextField(10);
+            JButton okButton = new JButton("Invio");
+            textDip.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            textDip.add(CK1); textDip.add(CK11); textDip.add(CK2); textDip.add(CK22); textDip.add(CK3); textDip.add(CK33);
+            textDip.add(okButton);
+                okButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        sistema.Check_in(CK11.getText(), Integer.parseInt(CK22.getText()), CK33.getText());
+                        textDip.setVisible(false);
+                        textPlace.append("Buon Lavoro");
+                    }
+                });
+        textDip.setVisible(false);
+        contet.add(textDip);
+
+        Customer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel d1 = new JLabel("CF"); JTextField d11 = new JTextField(10);
+        JLabel d2 = new JLabel("Codice"); JTextField d22 = new JTextField(10);
+        JButton b1 = new JButton("Autenticazione");
+        JButton b2 = new JButton("CHECK IN"); JButton b3 = new JButton("CHECK OUT");
+        JButton b4 = new JButton("Monitora"); JButton b5 = new JButton("Return");
+        Customer.add(d1); Customer.add(d11); Customer.add(d2); Customer.add(d22);
+        Customer.add(b2).setVisible(false); Customer.add(b3).setVisible(false);
+        b1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               cancellaTesto();
+               boolean[] risu = sistema.VerificaCredenziali(d11.getText(), d22.getText());
+               if(risu[0] && risu[1] == false){ 
+                for(Entry<Integer, Dipendente> entry : sistema.mappaDipendenti.entrySet()){
+                    if((entry.getValue().getCF().equals(d11.getText())) && (entry.getValue().getPass().equals(d22.getText()))) {
+                    textPlace.append("Utente " + entry.getValue().getID() + " verificato");
+                } } 
+                    d1.setVisible(false); d2.setVisible(false); d11.setVisible(false); d22.setVisible(false);
+                    Customer.add(b1).setVisible(false); Customer.add(b2).setVisible(true);
+                    Customer.add(b3).setVisible(true); Customer.add(b5).setVisible(true);
+               } else if(risu[1]){ 
+                    textPlace.append("Benvenuto Admin");
+                    d1.setVisible(false); d2.setVisible(false); d11.setVisible(false); d22.setVisible(false);
+                    Customer.add(CK3); Customer.add(CK33);
+                    Customer.add(b1).setVisible(false); Customer.add(b4).setVisible(true); Customer.add(b5).setVisible(true);
+               }
+            }
+        });
+        Customer.add(b1);
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textPlace.append("");
+                textDip.setVisible(!textDip.isVisible());
+            }
+        });
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(sistema.getDipendente() != null){
+                    textPlace.append("");
+                    sistema.Check_Out();
+                    d1.setVisible(true); d2.setVisible(true); d11.setVisible(true); d22.setVisible(true);
+                    Customer.add(b1).setVisible(true);
+                    Customer.add(b2).setVisible(false);
+                    Customer.add(b3).setVisible(false);
+                    Customer.add(b4).setVisible(false);
+                    Customer.add(b5).setVisible(false);
+            }
+            }
+        });
+        b4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancellaTesto();
+                String admList = sistema.MonitoraDipendenti(CK33.getText());
+                textPlace.append(admList);
+                
+            }
+        });
+        b5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancellaTesto();
+                d1.setVisible(true); d2.setVisible(true); d11.setVisible(true); d22.setVisible(true);
+                CK3.setVisible(false); CK33.setVisible(false);
+                    Customer.add(b1).setVisible(true);
+                    Customer.add(b2).setVisible(false);
+                    Customer.add(b3).setVisible(false);
+                    Customer.add(b4).setVisible(false);
+                    Customer.add(b5).setVisible(false);
+                
+            }
+        });
+        Customer.add(b4).setVisible(false);
+        Customer.setVisible(false);
+        contet.add(Customer);
+        return contet;
+    }
+
+    public static void main(String[] args) {
+            
+        sistema = IlPiattinodOro.getInstance();
+        JFrame frame = new JFrame("Il Piattino d'Oro");
+        frame.setLayout(new BorderLayout());
+        frame.setBackground(Color.GREEN);
+        frame.setJMenuBar(Menu());
+        frame.add(Logo(), BorderLayout.NORTH);
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+
+//Area Nuovo Gioco
+        content.add(AreaNuovoGioco());
+//Area Gioco
+        content.add(AreaGioco());
+//Area Nuovo Premio
+        content.add(AreaNuovoPremio());
+//Area Nuovo Cibo
+        content.add(AreaNuovoCibo());
+//Area Visualizzare Scritte
+        textPlace = new JTextArea();
+        textPlace.setLineWrap(true);
+        textPlace.setFont(textPlace.getFont().deriveFont(16f));
+        textPlace.setVisible(false);
+        content.add(textPlace);
+//Area Carta
+        content.add(AreaCarta());
 //Pulsanti Area Gioco
         GiocoButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton button1 = new JButton("Elenco giochi");
@@ -296,7 +448,6 @@ public class GUI{
         GiocoButtons.add(button3); 
         GiocoButtons.setVisible(false);
         content.add(GiocoButtons);
-
 //Pulsanti Area Premio
         PremioButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton buttonp3 = new JButton("Elenco Premi");
@@ -317,9 +468,7 @@ public class GUI{
         });
         PremioButtons.add(buttonp4);
         PremioButtons.setVisible(false);
-        content.add(PremioButtons);
-
-        
+        content.add(PremioButtons);  
 //Pulsanti Area Cibo
         CiboButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton button5 = new JButton("Elenco Cibo");
@@ -341,12 +490,12 @@ public class GUI{
         CiboButtons.add(button6);
         CiboButtons.setVisible(false);
         content.add(CiboButtons);
-
+//Area Dipendenti
+        content.add(AreaDipendenti());
 //
         frame.add(content, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(800,600);
         frame.setVisible(true);
-
     }
 }

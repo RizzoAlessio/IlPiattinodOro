@@ -2,7 +2,6 @@ package main;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.time.LocalDate;
 
 
@@ -65,18 +64,24 @@ public class IlPiattinodOroPartita {
         }
     }
 
-    public void recuperaPartita(String gioco){
+    /*public String recuperaPartita(String gioco){
         for (Entry<String, Gioco> entry : GiochiDisponibili.entrySet()) {
-            if(gioco == entry.getValue().getNome()){
+            if(gioco.equals(entry.getValue().getCodice())){
                 String IDgioco = entry.getValue().getCodice();
                 for(Entry<String, Partita> entity : partiteAttuali.entrySet()){
-                    if(entity.getValue().getGioco().getCodice() == IDgioco){
+                    if(entity.getValue().getGioco().getCodice().equals(IDgioco)){
                         String partita = entity.getValue().getCodice();
                         System.out.println("Trovata partita per il gioco " + gioco + ": " + partita );
+                        return entity.getKey();
                     }
                 }
             }
         } 
+        return null;
+    }*/
+
+    public Partita recuperaPartita(){
+        return currPartita;
     }
 
     public Partita monitoraPartita(String IDpartita){

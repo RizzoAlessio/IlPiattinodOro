@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
-import java.time.LocalDate;
 
 
 public class IlPiattinodOro {
@@ -19,7 +18,6 @@ public class IlPiattinodOro {
     public Map<String, Gioco> GiochiDisponibili;
     private Premio currPremio;
     public Map<String, Premio> mappaPremi;
-    private Map<String, Carta> CarteFedeltà;
     private Cibo currCibo;
     public Map<String, Cibo> mappaCibi;
     private Prenotazione currPrenotazione;
@@ -34,7 +32,6 @@ public class IlPiattinodOro {
     private IlPiattinodOro() {
         this.GiochiDisponibili = new HashMap<>();
         this.mappaPremi= new HashMap<>();
-        this.CarteFedeltà = new HashMap<>();
         this.Colonna = new HashMap<>();
         this.mappaCibi = new HashMap<>();
         this.mappaPrenotazioni = new HashMap<>();
@@ -122,18 +119,16 @@ public class IlPiattinodOro {
         else new GiocoOff(sistema).taken();
     }
     public void puntiGiocoTot(String IDcarta){
-        List<String> Gioco = new ArrayList<>();
+        List<String> Giochi = new ArrayList<>();
         for(Entry<String, Gioco> entry : GiochiDisponibili.entrySet()){
             for(Entry<String, Integer> entry2 : entry.getValue().Punteggio.entrySet()){
                 if(Objects.equals(IDcarta, entry2.getKey())){
                     int pos = getPiazzamento(entry.getValue().getPunteggioOrdinato(), IDcarta);
-                    Gioco.add(entry.getValue().getNome() + " punteggio: " + entry2.getValue() + " " + pos +"°");
+                    Giochi.add(entry.getValue().getNome() + " punteggio: " + entry2.getValue() + " " + pos +"°");
                 }
             }
         } 
-        System.out.println("Gioco");
-        System.out.println(Gioco);
-
+        System.out.println(Giochi);
     }
     public int getPiazzamento(Map<String, Integer> Punti, String IDcarta) {
     int pos = 1;
@@ -296,7 +291,8 @@ public class IlPiattinodOro {
     public void avviaPartita(String IDCarta, String IDGioco, int giocatori){this.arbitro.avviaPartita(IDCarta, IDGioco, giocatori);}
     public void finePartita(int punteggio){ this.arbitro.finePartita(punteggio);}
     public void continua(boolean c){ this.arbitro.continua(c);}
-    public void recuperaPartita(String gioco){ this.arbitro.recuperaPartita(gioco);}
+    //public String recuperaPartita(String gioco){ return this.arbitro.recuperaPartita(gioco);}
+    public Partita recuperaPartita(){ return this.arbitro.recuperaPartita();}
     public Partita monitoraPartita(String IDpartita){ return this.arbitro.monitoraPartita(IDpartita);}
 
     //Dipendenti
@@ -332,22 +328,31 @@ public class IlPiattinodOro {
             }
         }
     } 
-    public void MonitoraDipendenti(String Giorno){
+    public String MonitoraDipendenti(String Giorno){
+        String elenco;
         if(currDipendente != null){
-            System.out.println("Il dipendente " + currDipendente.getCredenziali() + "è a lavoro");
+            elenco = ("Il dipendente " + currDipendente.getCredenziali() + "è a lavoro");
+            System.out.println(elenco);
         } else {
-            System.out.println("Nessun dipendente è a lavoro");
+            elenco = ("Nessun dipendente è a lavoro");
+            System.out.println(elenco);
         }
+        elenco += ("\nI dipendenti in turno oggi sono: ");
         System.out.println("I dipendenti in turno oggi sono: ");
         for(Entry<String, Turno> entry : Turni.entrySet()){
             if(entry.getValue().getGiorno().equals(Giorno) && entry.getValue().getDisponibile()){
                 for(Entry<Integer, Dipendente> entry1 : mappaDipendenti.entrySet()){
                     if((entry1.getValue().getID().equals(entry.getValue().getDip()))) {
+                        elenco += ("\nIl dipendente " + entry1.getValue().getCredenziali() + " dalle " + entry.getValue().getInizo() + " alle " + entry.getValue().getFine());
                         System.out.println("Il dipendente " + entry1.getValue().getCredenziali() + " dalle " + entry.getValue().getInizo() + " alle " + entry.getValue().getFine());
                     } 
                 }
             }
         }
+        return elenco;
+    }
+    public Dipendente getDipendente(){
+        return currDipendente;
     }
 
     /*

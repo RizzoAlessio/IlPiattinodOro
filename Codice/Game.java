@@ -9,7 +9,7 @@ import javax.swing.*;
 public class Game{
 
     public static JTextArea textListaG, textPlace;
-    private int p = 0;
+    public int p = 0;
 
     private static void cancellaTesto(){
         textPlace.setVisible(!textPlace.isVisible());

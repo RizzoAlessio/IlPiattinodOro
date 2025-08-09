@@ -1,8 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,7 +14,7 @@ public class Gioco {
 	private int giocatori;
 	private int costo;
 	private boolean attivo;
-	Map<String, Integer> Punteggio;
+	public Map<String, Integer> Punteggio;
 
 	public Gioco(String IDgioco, String nome, String tipologia, int giocatori, int costo) {
 		this.IDgioco = IDgioco;
@@ -71,7 +69,10 @@ public class Gioco {
 	}
 
 	public void setPunteggio(String IDcarta, int punti) {
-		this.Punteggio.merge(IDcarta, punti, Integer::sum); 
+		this.Punteggio.merge(IDcarta, punti, Integer::sum);
+		if(this.Punteggio.get(IDcarta) != null && this.Punteggio.get(IDcarta) <= punti){
+			this.Punteggio.put(IDcarta, punti); 
+		}
 	}
 	public Map<String, Integer> getPunteggioOrdinato() {
         List<Map.Entry<String, Integer>> PuntiTot = new ArrayList<>(this.Punteggio.entrySet());

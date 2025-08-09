@@ -62,7 +62,7 @@ public class Partita {
 
 	@Override
 	public String toString() {
-		return "Partita{" + IDpartita + "di " + carta.getCliente() + " in " + gioco.getNome() + ", geiocatori " + giocatori + " punteggio=" + punteggio + " in " +datainizio + '}' + '\n';
+		return "Partita: " + IDpartita + " di " + carta.getCliente() + " in " + gioco.getNome() + ", giocatori " + giocatori + " in " + datainizio + '\n';
 	}
 
 }
