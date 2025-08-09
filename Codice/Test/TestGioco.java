@@ -151,7 +151,7 @@ public class TestGioco {
         sistema.Pagamento();
         sistema.richiestaPartita(ID, "01");
         sistema.avviaPartita(ID, "01", 1);
-        sistema.recuperaPartita("Biliardo");
+        sistema.recuperaPartita();
         sistema.monitoraPartita("2025-02-18I0");
         sistema.statoGioco("01");
         sistema.statoGioco("03");
@@ -170,8 +170,8 @@ public class TestGioco {
         sistema.ricaricaGettoni(100);
         String ID = sistema.getCartaCorrente().getCodice();
         sistema.Pagamento();
-        sistema.richiestaPartita(ID, "01");
-        sistema.avviaPartita(ID, "01", 1);
+        sistema.richiestaPartita(ID, "02");
+        sistema.avviaPartita(ID, "02", 1);
         sistema.finePartita(100);
         sistema.continua(false);
         sistema.inserisciTessera(ID);
@@ -183,9 +183,24 @@ public class TestGioco {
         sistema.ricaricaGettoni(100);
         String ID2 = sistema.getCartaCorrente().getCodice();
         sistema.Pagamento();
-        sistema.richiestaPartita(ID2, "01");
-        sistema.avviaPartita(ID2, "01", 1);
+        sistema.richiestaPartita(ID2, "02");
+        sistema.avviaPartita(ID2, "02", 1);
         sistema.finePartita(99);
+        sistema.continua(false);
+        sistema.inserisciTessera(ID2);
+        sistema.puntiGiocoTot(ID2);
+        sistema.puntiGiocoTot(ID);
+
+        sistema.richiestaPartita(ID, "02");
+        sistema.avviaPartita(ID, "02", 1);
+        sistema.finePartita(100);
+        sistema.continua(false);
+        sistema.inserisciTessera(ID);
+        sistema.puntiGiocoTot(ID);
+        
+        sistema.richiestaPartita(ID2, "02");
+        sistema.avviaPartita(ID2, "02", 1);
+        sistema.finePartita(105);
         sistema.continua(false);
         sistema.inserisciTessera(ID2);
         sistema.puntiGiocoTot(ID2);
