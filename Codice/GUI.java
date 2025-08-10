@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 /*
  * INSERIRE:
  *  PRENOTAZIONE (?)
- *  COMPRA PREMIO (?)
  */
 
 import javax.swing.*;
@@ -188,17 +187,55 @@ public class GUI{
             JLabel np2 = new JLabel("Valore"); JTextField np22 = new JTextField(10);
             JLabel np3 = new JLabel("Descrizione"); JTextField np33 = new JTextField(10);
             JLabel np4 = new JLabel("Numero Copie"); JTextField np44 = new JTextField(10);
-            JButton addPremio = new JButton("Aggiungi");
+            JButton addPremio = new JButton("Aggiungi"); JButton buyPremio = new JButton("Riscatta");
+            JButton buyPremio1 = new JButton("Cerca per costo"); JButton buyPremio2 = new JButton("Compra");
             textListaP.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
             textListaP.add(np1); textListaP.add(np11); textListaP.add(np2); textListaP.add(np22);
             textListaP.add(np3); textListaP.add(np33); textListaP.add(np4); textListaP.add(np44);
-            textListaP.add(addPremio);
+            textListaP.add(addPremio); textListaP.add(buyPremio); 
+            textListaP.add(buyPremio1).setVisible(false); textListaP.add(buyPremio2).setVisible(false);
+            //----------------//
+            JLabel nom = new JLabel("Inserici Tessera"); JTextField nomm = new JTextField(10); JButton invio = new JButton("Invio");
+            textListaP.add(nom).setVisible(false);  textListaP.add(nomm).setVisible(false); textListaP.add(invio).setVisible(false); 
                 addPremio.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String IDpremio = '0' + Integer.toString(sistema.mappaPremi.size() + 1);
                         sistema.InserisciPremio(IDpremio, np11.getText(), Integer.parseInt(np22.getText()), np33.getText(), Integer.parseInt(np44.getText()));
                         sistema.FineInserimentoPremio();
+                    }
+                });
+                buyPremio.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        nom.setVisible(!nom.isVisible()); nomm.setVisible(!nomm.isVisible()); invio.setVisible(!invio.isVisible());  
+                            invio.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    cancellaTesto();
+                                    Carta c = sistema.gestore.getCarta(nomm.getText());
+                                    int tot = sistema.inserisciTessera(c.getCodice());
+                                    textPlace.append("Sono disponibili " + tot + " punti");
+                                    textListaP.add(buyPremio1).setVisible(!buyPremio1.isVisible());
+                                }}); 
+                }});
+                buyPremio1.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        String totPremi = sistema.cercaPremio(Integer.parseInt(np22.getText()));
+                        textPlace.append(totPremi);
+                        textListaP.add(buyPremio2).setVisible(!buyPremio2.isVisible());
+                    }
+                });
+                buyPremio2.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cancellaTesto();
+                        String IDp = sistema.getPremioNome(np11.getText());
+                        String IDc = nomm.getText();
+                        int reTot = sistema.scegliPremio(IDp, IDc);
+                        textPlace.append("Sono disponibili ora " + reTot + " punti\n Goditi il tuo " + np11.getText());
                     }
                 });
             textListaP.setVisible(false);
@@ -452,6 +489,7 @@ public class GUI{
         PremioButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton buttonp3 = new JButton("Elenco Premi");
         JButton buttonp4 = new JButton("Aggiungi Premi");
+        JButton buttonp7 = new JButton("Riscatta Premi");
         buttonp3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -467,6 +505,13 @@ public class GUI{
             }
         });
         PremioButtons.add(buttonp4);
+        buttonp7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textListaP.setVisible(!textListaP.isVisible());
+            }
+        });
+        PremioButtons.add(buttonp7);
         PremioButtons.setVisible(false);
         content.add(PremioButtons);  
 //Pulsanti Area Cibo

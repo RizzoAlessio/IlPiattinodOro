@@ -77,7 +77,7 @@ public class Premio implements java.lang.Cloneable{
     @Override
 	public String toString() {
 		return "" + ID + ": " + Nome + ", valore = " + Valore + ", quantità: " + mappaCopiePremio.size()
-        + "\n Descrizione: " + Descrizione + "}\n";
+        + "\nDescrizione: " + Descrizione + "\n";
 	}
 }
 

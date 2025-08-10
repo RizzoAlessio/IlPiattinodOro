@@ -171,32 +171,42 @@ public class IlPiattinodOro {
         System.out.println(currPremio);
         return currPremio;
     }
+    public String getPremioNome(String nome) {
+        for(Entry<String, Premio> entry : mappaPremi.entrySet()){
+            if(entry.getValue().getNome().equals(nome)) return entry.getKey();
+        }
+        return null;
+    }
     public void getPremio(String ID) {
         System.out.println(mappaPremi.get(ID));
     }
-    public void inserisciTessera(String IDcarta){
+    public int inserisciTessera(String IDcarta){
         Carta tessera = this.gestore.getCarta(IDcarta);
         int totalP = 0;
         for(Entry<String, Integer> entry : tessera.Punteggio.entrySet()){
             totalP += entry.getValue();
         } 
         System.out.println("Sono disponibili " + totalP + " punti");
+        return totalP;
     }
-    public void cercaPremio(int costo){
+    public String cercaPremio(int costo){
+        String premio = null;
         for(Entry<String, Premio> entry : mappaPremi.entrySet()){
             if(entry.getValue().getValore() <= costo) {
+                premio += ("Premio "+ entry.getValue().getID() + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore() + "\n"); 
                 System.out.println("Premio "+ entry.getValue().getID() + entry.getValue().getNome() + "; punti: " + entry.getValue().getValore());
             }
-        } 
+        }
+        return premio;
     }
-    public void scegliPremio(String IDp, String IDc){
+    public int scegliPremio(String IDp, String IDc){
         for(Entry<String, Premio> entry : mappaPremi.entrySet()){
             if(entry.getValue().getID().equals(IDp)) {
                 this.gestore.getCarta(IDc).removePunti(entry.getValue().getValore());
                 entry.getValue().removeCopia(IDp);
         }
     }
-        this.inserisciTessera(IDc);
+        return this.inserisciTessera(IDc);
     }
 
     //Gestore Carta
@@ -355,7 +365,4 @@ public class IlPiattinodOro {
         return currDipendente;
     }
 
-    /*
-
-    */
 }
