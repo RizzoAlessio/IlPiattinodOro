@@ -326,9 +326,8 @@ public class GUI{
     }
 
     private static JPanel AreaDipendenti(){
-        JPanel contet = new JPanel();
-        JTextArea textDip = new JTextArea();
-        textDip.setLineWrap(true);
+
+        JPanel textDip = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
             JLabel CK1 = new JLabel("ID"); JTextField CK11 = new JTextField(10);
             JLabel CK2 = new JLabel("Orario"); JTextField CK22 = new JTextField(10);
             JLabel CK3 = new JLabel("Giorno"); JTextField CK33 = new JTextField(10);
@@ -346,7 +345,6 @@ public class GUI{
                     }
                 });
         textDip.setVisible(false);
-        contet.add(textDip);
 
         Customer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel d1 = new JLabel("CF"); JTextField d11 = new JTextField(10);
@@ -381,7 +379,7 @@ public class GUI{
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textPlace.append("");
+                cancellaTesto();
                 textDip.setVisible(!textDip.isVisible());
             }
         });
@@ -424,9 +422,9 @@ public class GUI{
             }
         });
         Customer.add(b4).setVisible(false);
+        Customer.add(textDip);
         Customer.setVisible(false);
-        contet.add(Customer);
-        return contet;
+        return Customer;
     }
 
     public static void main(String[] args) {
