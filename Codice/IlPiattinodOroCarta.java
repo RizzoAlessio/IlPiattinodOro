@@ -10,13 +10,11 @@ import java.util.Map.Entry;
 public class IlPiattinodOroCarta {
 
     private Map<String, Colonnina> Colonna;
-    private Map<String, Gioco> GiochiDisponibili; //per il futuro
     private Carta currCarta;
     private Map<String, Carta> CarteFedeltà;
     public String Messaggio;
 
     public IlPiattinodOroCarta(Map<String, Gioco> GiochiDisponibili, Map<String, Colonnina> Colonna) {
-        this.GiochiDisponibili= GiochiDisponibili;
         this.Colonna = Colonna;
         this.CarteFedeltà = new HashMap<>();
     }

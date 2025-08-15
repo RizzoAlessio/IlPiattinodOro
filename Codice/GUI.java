@@ -21,9 +21,9 @@ public class GUI{
     public static JPanel GiocoButtons, PremioButtons, CiboButtons, Customer;
 
     private static JMenuBar Menu(){
-        JMenuBar menu = new JMenuBar();
-        JMenu x = new JMenu("Menu");
-        JMenu y = new JMenu("Sistema");
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        JMenu syst = new JMenu("Sistema");
             JMenuItem mGioco = new JMenuItem("Area Gioco");
             mGioco.addActionListener(new ActionListener() {
                 @Override
@@ -79,10 +79,10 @@ public class GUI{
                     Customer.setVisible(false);
                 }
             });
-        y.add(mGioco);  y.add(mCibo);y.add(mPremio);
-        x.add(y); x.add(mCheck); x.add(mCarta);
-        menu.add(x);
-        return menu;
+        syst.add(mGioco);  syst.add(mCibo);syst.add(mPremio);
+        menu.add(syst); menu.add(mCheck); menu.add(mCarta);
+        menuBar.add(menu);
+        return menuBar;
     }
 
     private static JLabel Logo(){
@@ -456,81 +456,81 @@ public class GUI{
         content.add(AreaCarta());
 //Pulsanti Area Gioco
         GiocoButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton button1 = new JButton("Elenco giochi");
-        JButton button2 = new JButton("Aggiungi gioco");
-        JButton button3 = new JButton("Gioca");
-        button1.addActionListener(new ActionListener() {
+        JButton elGiochi = new JButton("Elenco giochi");
+        JButton addGiohi = new JButton("Aggiungi gioco");
+        JButton Play = new JButton("Gioca");
+        elGiochi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cancellaTesto();
                 textPlace.append(sistema.getElencoGiochi().toString());
             }
         });
-        GiocoButtons.add(button1);
-        button2.addActionListener(new ActionListener() {
+        GiocoButtons.add(elGiochi);
+        addGiohi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textListaG.setVisible(!textListaG.isVisible());
             }
         });
-        GiocoButtons.add(button2);  
-        button3.addActionListener(new ActionListener() {
+        GiocoButtons.add(addGiohi);  
+        Play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textGiocaG.setVisible(!textGiocaG.isVisible());
             }
         });
-        GiocoButtons.add(button3); 
+        GiocoButtons.add(Play); 
         GiocoButtons.setVisible(false);
         content.add(GiocoButtons);
 //Pulsanti Area Premio
         PremioButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton buttonp3 = new JButton("Elenco Premi");
-        JButton buttonp4 = new JButton("Aggiungi Premi");
-        JButton buttonp7 = new JButton("Riscatta Premi");
-        buttonp3.addActionListener(new ActionListener() {
+        JButton elPremi = new JButton("Elenco Premi");
+        JButton addPremi = new JButton("Aggiungi Premi");
+        JButton risc = new JButton("Riscatta Premi");
+        elPremi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cancellaTesto();
                 textPlace.append(sistema.getElencoPremi().toString());
             }
         });
-        PremioButtons.add(buttonp3);
-        buttonp4.addActionListener(new ActionListener() {
+        PremioButtons.add(elPremi);
+        addPremi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textListaP.setVisible(!textListaP.isVisible());
             }
         });
-        PremioButtons.add(buttonp4);
-        buttonp7.addActionListener(new ActionListener() {
+        PremioButtons.add(addPremi);
+        risc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textListaP.setVisible(!textListaP.isVisible());
             }
         });
-        PremioButtons.add(buttonp7);
+        PremioButtons.add(risc);
         PremioButtons.setVisible(false);
         content.add(PremioButtons);  
 //Pulsanti Area Cibo
         CiboButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton button5 = new JButton("Elenco Cibo");
-        JButton button6 = new JButton("Aggiungi Cibo");
-        button5.addActionListener(new ActionListener() {
+        JButton elCibo = new JButton("Elenco Cibo");
+        JButton addCibo = new JButton("Aggiungi Cibo");
+        elCibo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cancellaTesto();
                 textPlace.append(sistema.getElencoCibi().toString());
             }
         });
-        CiboButtons.add(button5);
-        button6.addActionListener(new ActionListener() {
+        CiboButtons.add(elCibo);
+        addCibo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textListaC.setVisible(!textListaP.isVisible());
             }
         });
-        CiboButtons.add(button6);
+        CiboButtons.add(addCibo);
         CiboButtons.setVisible(false);
         content.add(CiboButtons);
 //Area Dipendenti
