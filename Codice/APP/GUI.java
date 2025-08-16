@@ -6,11 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.util.Map.Entry;
 
-/*
- * INSERIRE:
- *  PRENOTAZIONE (?)
- */
-
 import javax.swing.*;
 
 import main.Carta;
@@ -546,4 +541,5 @@ public class GUI{
         frame.setSize(800,600);
         frame.setVisible(true);
     }
+
 }
