@@ -60,10 +60,22 @@ public class Cibo implements java.lang.Cloneable{
         return list;
     }
 
-    public void newQuantita(){
-        String ID = this.IDcibo + "" +  mappaDispensa.size();
-        this.mappaDispensa.put(ID, this);
+	@Override
+    public Cibo clone() {
+        Cibo porzione = null;
+            try {
+               porzione = (Cibo) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        return porzione;
     }
+    public void newQuantita() {
+        String ID = this.IDcibo + "" +  mappaDispensa.size();
+        Cibo cibo = this.clone();
+        cibo.setCodice(ID);
+       	this.mappaDispensa.put(ID, cibo);
+    } 
 
     public void compraCibo(String IDcibo){
         String ID = IDcibo + "" +  mappaDispensa.size();

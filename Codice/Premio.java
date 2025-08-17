@@ -64,10 +64,22 @@ public class Premio implements java.lang.Cloneable{
         return listCopiePremio;
     }
 
-    public void newCopia(){
-        String ID = this.ID + "" +  mappaCopiePremio.size();
-        this.mappaCopiePremio.put(ID, copia());
+    @Override
+    public Premio clone() {
+        Premio copia = null;
+            try {
+                copia = (Premio) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        return copia;
     }
+    public void newCopia() {
+        String ID = this.ID + "_" + mappaCopiePremio.size();
+        Premio copia = this.clone();
+        copia.setID(ID);
+        mappaCopiePremio.put(ID, copia);
+    } 
 
     public void removeCopia(String IDcopia){
         String ID = IDcopia + "" +  mappaCopiePremio.size();
@@ -80,4 +92,3 @@ public class Premio implements java.lang.Cloneable{
         + "\nDescrizione: " + Descrizione + "\n";
 	}
 }
-
